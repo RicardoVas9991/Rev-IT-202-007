@@ -8,11 +8,15 @@ function bePositive($arr) {
     echo "<br>Processing Array:<br><pre>" . var_export($arr, true) . "</pre>";
     echo "<br>Positive output:<br>";
     $output = [];
-    //start edits
-    //note: use the $arr variable, don't directly touch $a1-$a4
-    //TODO Take each value of the $arr, convert it to positive, and set it to the same index in the $output array but with the original data type (i.e., if the source was a string the output slot value should be a string)
     
-    //end edits
+    //rev - 9/22/2024
+    foreach ($arr as $value) {
+        if (is_string($value)) {
+            $output[] = (string) abs(floatval($value));
+        } else {
+            $output[] = abs($value);
+        }
+    }
     
     //displays the output along with their types
     $mappedOutput = array_map(function($o) {
