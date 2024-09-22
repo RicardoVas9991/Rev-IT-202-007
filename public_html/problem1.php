@@ -6,10 +6,12 @@ $a4 = [0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7, 8, 8, 9, 9, 10, 10];
 function processArray($arr) {
     echo "<br>Processing Array:<br><pre>" . var_export($arr, true) . "</pre>";
     echo "<br>Odds output:<br>";
-    //start edits
-    //note: use the $arr variable to iterate over, don't directly touch $a1-$a4
-    //TODO add logic here to echo out only odd values
-    //end edits
+    //rev - 9/22/2024
+    foreach ($arr as $value) {
+        if ($value % 2 !== 0) {
+            echo $value . " ";
+        }
+    }
 }
 echo "Problem 1: Odd Output<br>";
 ?>
