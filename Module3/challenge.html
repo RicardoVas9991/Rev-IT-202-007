@@ -7,19 +7,66 @@
     <script>
         window.addEventListener("load", () => {
             console.log("loaded via javascript");
-            //TODO: add any extra onload processing you may need here (hint: you'll likely want to start here for the JS challenge)
+            // rev - 9/29/2024 - Call getCurrentSelection to handle any hash-based navigation
+            getCurrentSelection();
         });
         function getCurrentSelection() {
             setTimeout(() => {
-                //added this delay here as some solutions may require it to update properly (i.e., click code may complete before the navigation changes)
-                //TODO: add code for processing the current selection (this section isn't mandatory for all solutions)
+                // rev - 9/29/2024 - process the current selection
+                const currentHash = window.location.hash;
+                const getCurrentSelection = currentHash ? currentHash.substring(1) : 'start';
 
-                //Note: likely you'll want to call updateCurrentPage towards the end
+                // rev - 9/29/2024 - Update the page based on the current selection
+                updateCurrentPage(currentSelection);
+
+                // rev - 9/29/2024 - Update the <h1> and <title> content
+                const h1Element = document.querySelector('h1');
+                h1Element.innerText = currentSelection;
+                document.title = currentSelection;
+
             }, 100);
         }
     </script>
     <style>
-        /* TODO: make style edits here */
+        /* rev - 9/29/2024 - style edits */
+        nav ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        nav ul li {
+            display: inline-block;
+            margin-right: 20px;
+        }
+
+        nav {
+            background-color: lightgray;
+            padding: 10px;
+        }
+
+        nav ul li a:hover {
+            color: red;
+            background-color: yellow;
+        }
+
+        ul li::before {
+            content: "√ "; /* hold Alt key and then type 251 then release */
+            color: green;
+        }
+
+        h1::first-letter, a::first-letter {
+            text-transform: uppercase;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 10px;
+        }
+
+        h3 + ul {
+            list-style: initial;
+        }
     </style>
     <!-- make the necessary edits above this line -->
 
