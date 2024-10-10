@@ -1,6 +1,6 @@
 <?php
-// Code to include the DB connection
-require(__DIR__ . "/../../lib/db.php");
+//TODO 1: require db.php
+require_once(__DIR__ . "/db.php");
 
 //require safer_echo.php
 require(__DIR__ . "/safer_echo.php");
