@@ -38,49 +38,52 @@ if (isset($_POST["email"]) && isset($_POST["password"]) && isset($_POST["confirm
     //TODO 3
     $hasError = false;
     if (empty($email)) {
-        flash("Email must not be empty");
+        echo "Email must not be empty";
         $hasError = true;
     }
     //sanitize
+    //$email = filter_var($email, FILTER_SANITIZE_EMAIL);
     $email = sanitize_email($email);
     //validate
-    if (!is_valid_email($email)) {
-        flash("Invalid email address");
-        $hasError = true;
+    if(!is_valid_email($email)){
+        echo "Invalid email address";
+
     }
+    /*if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        echo "Invalid email address";
+        $hasError = true;
+    }*/
     if (empty($password)) {
-        flash("password must not be empty");
+        echo "password must not be empty";
         $hasError = true;
     }
     if (empty($confirm)) {
-        flash("Confirm password must not be empty");
+        echo "Confirm password must not be empty";
         $hasError = true;
     }
     if (strlen($password) < 8) {
-        flash("Password too short");
+        echo "Password too short";
         $hasError = true;
     }
     if (
         strlen($password) > 0 && $password !== $confirm
     ) {
-        flash("Passwords must match");
+        echo "Passwords must match";
         $hasError = true;
     }
     if (!$hasError) {
+        //echo "Welcome, $email";
         //TODO 4
         $hash = password_hash($password, PASSWORD_BCRYPT);
         $db = getDB();
         $stmt = $db->prepare("INSERT INTO Users (email, password) VALUES(:email, :password)");
         try {
             $stmt->execute([":email" => $email, ":password" => $hash]);
-            flash("Successfully registered!");
+            echo "Successfully registered!";
         } catch (Exception $e) {
-            flash("There was a problem registering");
-            flash("<pre>" . var_export($e, true) . "</pre>");
+            echo "There was a problem registering";
+            "<pre>" . var_export($e, true) . "</pre>";
         }
     }
 }
-?>
-<?php
-require(__DIR__ . "/../../partials/flash.php");
 ?>
