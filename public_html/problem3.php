@@ -48,10 +48,18 @@ function joinArrays($users, $activities) {
     // Note: use the $users and $activities variables to iterate over, don't directly touch $a1-$a4 arrays
     // TODO add logic here to join the arrays on userId
     $joined = []; // result array
-    // Start edits
-    
 
+    // Start edits
+    // rev - 10/20/2024 - add logic to join the arrays on userId
+    foreach ($users as $user) {
+        foreach ($activities as $activity) {
+            if ($user['userId'] === $activity['userId']) {
+                $joined[] = array_merge($user, ['activity' => $activity['activity']]);
+            }
+        }
+    }
     // End edits
+    
     echo "<pre>" . var_export($joined, true) . "</pre>";
 }
 

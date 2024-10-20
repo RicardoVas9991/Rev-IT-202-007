@@ -28,9 +28,19 @@ function processCars($cars) {
     $currentYear = null; // determine current year
     $processedCars = []; // result array
     $classic_age = 25; // don't change this value
+    
     // Start edits
-   
+    // rev - 10/202/24 - add logic to create a new array with original properties plus age and isClassic (extra data)
+    foreach ($cars as $car) {
+        $age = $currentYear - $car['year'];
+        $isClassic = $age >= $classic_age ? true : false;
+        $processedCars[] = array_merge($car, [
+            'age' => $age,
+            'isClassic' => $isClassic
+        ]);
+    }
     // End edits
+    
     echo "<pre>" . var_export($processedCars, true) . "</pre>";
     
 }
