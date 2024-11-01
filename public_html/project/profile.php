@@ -13,7 +13,7 @@ if (isset($_POST["save"])) {
     try {
         $stmt->execute($params);
         flash("Profile saved", "success");
-    } catch (Exception $e) {
+    } catch(PDOException $e){
         if ($e->errorInfo[1] === 1062) {
             //https://www.php.net/manual/en/function.preg-match.php
             preg_match("/Users.(\w+)/", $e->errorInfo[2], $matches);
@@ -71,7 +71,7 @@ if (isset($_POST["save"])) {
                         flash("Current password is invalid", "warning");
                     }
                 }
-            } catch (Exception $e) {
+            } catch(PDOException $e){
                 echo "<pre>" . var_export($e->errorInfo, true) . "</pre>";
             }
         } else {
@@ -120,7 +120,7 @@ $username = get_username();
 
         //example of using flash via javascript
         //find the flash container, create a new element, appendChild
-        if (pw !== con) {
+        if (!isEqual(pw, con)) {
             flash("Password and Confrim password must match", "warning");
             isValid = false;
         }
