@@ -13,7 +13,21 @@ if (isset($_POST["save"])) {
     try {
         $stmt->execute($params);
         flash("Profile saved", "success");
-    } catch(PDOException $e){
+    } catch (PDOException $e) {
+        if ($e->errorInfo[1] === 1062) {
+            //https://www.php.net/manual/en/function.preg-match.php
+            preg_match("/Users.(\w+)/", $e->errorInfo[2], $matches);
+            if (isset($matches[1])) {
+                flash("The chosen " . $matches[1] . " is not available.", "warning");
+            } else {
+                //TODO come up with a nice error message
+                echo "<pre>" . var_export($e->errorInfo, true) . "</pre>";
+            }
+        } else {
+            //TODO come up with a nice error message
+            echo "<pre>" . var_export($e->errorInfo, true) . "</pre>";
+        }
+    } catch(Exception $e) {
         if ($e->errorInfo[1] === 1062) {
             //https://www.php.net/manual/en/function.preg-match.php
             preg_match("/Users.(\w+)/", $e->errorInfo[2], $matches);
@@ -40,9 +54,13 @@ if (isset($_POST["save"])) {
         } else {
             flash("User doesn't exist", "danger");
         }
-    } catch (Exception $e) {
+    } catch (PDOException $e) {
         flash("An unexpected error occurred, please try again", "danger");
-        //echo "<pre>" . var_export($e->errorInfo, true) . "</pre>";
+        echo "<pre>" . var_export($e->errorInfo, true) . "</pre>";
+    }
+    catch (Exception $e) {
+        flash("An unexpected error occurred, please try again", "danger");
+        echo "<pre>" . var_export($e->errorInfo, true) . "</pre>";
     }
 
 
@@ -71,7 +89,9 @@ if (isset($_POST["save"])) {
                         flash("Current password is invalid", "warning");
                     }
                 }
-            } catch(PDOException $e){
+            }  catch (PDOException $e) {
+                echo "<pre>" . var_export($e->errorInfo, true) . "</pre>";
+            }  catch(Exception $e) {
                 echo "<pre>" . var_export($e->errorInfo, true) . "</pre>";
             }
         } else {
