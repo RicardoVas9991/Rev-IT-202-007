@@ -1,7 +1,7 @@
 <?php
 require_once(__DIR__ . "/../../partials/nav.php");
 is_logged_in(true);
-
+// rev/11-07-2024
 if (isset($_POST["save"])) {
     $email = se($_POST, "email", null, false);
     $username = se($_POST, "username", null, false);
@@ -103,6 +103,7 @@ $username = get_username();
 </form>
 
 <script>
+    // rev/11-07-2024
     function validate(form) {
         const email = form.email.value.trim();
         const username = form.username.value.trim();
