@@ -81,8 +81,6 @@ if (isset($_POST["email"]) && isset($_POST["password"]) && isset($_POST["confirm
             flash("Successfully registered!", "success");
         } catch (PDOException $e) {
             users_check_duplicate($e->errorInfo);
-        } catch (Exception $e) {
-            users_check_duplicate($e->errorInfo);
         }
     }
 }
