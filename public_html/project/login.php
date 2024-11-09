@@ -13,6 +13,7 @@ require_once(__DIR__ . "/../../partials/nav.php");
     <input type="submit" value="Login" />
 </form>
 <script>
+    // rev/11-07-2024
     function validate(form) {
         const emailInput = form.email.value.trim();
         const passwordInput = form.password.value.trim();
@@ -45,7 +46,7 @@ require_once(__DIR__ . "/../../partials/nav.php");
 </script>
 
 <?php
-
+// rev/11-07-2024
 if (isset($_POST["email"]) && isset($_POST["password"])) {
     $email = se($_POST, "email", "", false);
     $password = se($_POST, "password", "", false);
@@ -100,10 +101,11 @@ if (isset($_POST["email"]) && isset($_POST["password"])) {
                         } catch (Exception $e) {
                             error_log(var_export($e, true));
                         }
-
+    
                         $_SESSION["user"]["roles"] = $roles ?? [];
                         flash("Welcome, " . get_username(), "success");
-                        die(header("Location: home.php"));
+                        header("Location: home.php");
+                        exit(); // Use exit() instead of die()
                     } else {
                         flash("Invalid password", "danger");
                     }
