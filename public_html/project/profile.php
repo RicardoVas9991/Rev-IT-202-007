@@ -14,10 +14,17 @@ if (isset($_POST["save"])) {
         $stmt->execute($params);
         flash("Profile saved", "success");
     } catch (PDOException $e) {
-        if ($e->errorInfo[1] === 1062) {
+        if ($e->errorInfo[1] === 1062) { // rev/11-09-2024 - Duplicate entry error code
             preg_match("/Users.(\w+)/", $e->errorInfo[2], $matches);
             if (isset($matches[1])) {
-                flash("The chosen " . $matches[1] . " is not available.", "warning");
+                $field = $matches[1];
+                if ($field === "email") {
+                    flash("The chosen email address is already in use. Please try a different one.", "warning");
+                } elseif ($field === "username") {
+                    flash("The chosen username is already in use. Please try a different one.", "warning");
+                } else {
+                    flash("A database error occurred, please try again.", "danger");
+                }
             } else {
                 flash("A database error occurred, please try again.", "danger");
             }
