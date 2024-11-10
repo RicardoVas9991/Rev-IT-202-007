@@ -105,7 +105,7 @@ if (isset($_POST["email"]) && isset($_POST["password"])) {
                         $_SESSION["user"]["roles"] = $roles ?? [];
                         flash("Welcome, " . get_username(), "success");
                         //header("Location: home.php");
-                        exit(); // Use exit() instead of die()
+                        exit(); // rev/11-09-2024 - Use exit() instead of die()
                     } else {
                         flash("Invalid password", "danger");
                     }
