@@ -1,7 +1,7 @@
 <?php
 require_once(__DIR__ . "/../../partials/nav.php");
 is_logged_in(true);
-
+// rev/11-07-2024
 if (isset($_POST["save"])) {
     $email = se($_POST, "email", null, false);
     $username = se($_POST, "username", null, false);
@@ -14,10 +14,17 @@ if (isset($_POST["save"])) {
         $stmt->execute($params);
         flash("Profile saved", "success");
     } catch (PDOException $e) {
-        if ($e->errorInfo[1] === 1062) {
+        if ($e->errorInfo[1] === 1062) { // rev/11-09-2024 - Duplicate entry error code
             preg_match("/Users.(\w+)/", $e->errorInfo[2], $matches);
             if (isset($matches[1])) {
-                flash("The chosen " . $matches[1] . " is not available.", "warning");
+                $field = $matches[1];
+                if ($field === "email") {
+                    flash("The chosen email address is already in use. Please try a different one.", "warning");
+                } elseif ($field === "username") {
+                    flash("The chosen username is already in use. Please try a different one.", "warning");
+                } else {
+                    flash("A database error occurred, please try again.", "danger");
+                }
             } else {
                 flash("A database error occurred, please try again.", "danger");
             }
@@ -103,6 +110,7 @@ $username = get_username();
 </form>
 
 <script>
+    // rev/11-07-2024
     function validate(form) {
         const email = form.email.value.trim();
         const username = form.username.value.trim();
