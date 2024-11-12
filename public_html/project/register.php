@@ -2,102 +2,70 @@
 require(__DIR__ . "/../../partials/nav.php");
 reset_session();
 ?>
+<div class="container-fluid">
 <form onsubmit="return validate(this)" method="POST">
-    <div>
-        <label for="email">Email</label>
-        <input type="email" name="email" required />
-    </div>
-    <div>
-        <label for="username">Username</label>
-        <input type="text" name="username" required maxlength="30" />
-    </div>
-    <div>
-        <label for="pw">Password</label>
-        <input type="password" id="pw" name="password" required minlength="8" />
-    </div>
-    <div>
-        <label for="confirm">Confirm</label>
-        <input type="password" name="confirm" required minlength="8" />
-    </div>
-    <input type="submit" value="Register" />
+    <?php render_input(["type"=>"email", "id"=>"email", "name"=>"email", "label"=>"Email", "rules"=>["required"=>true]]);?>
+    <?php render_input(["type"=>"text", "id"=>"username", "name"=>"username", "label"=>"Username", "rules"=>["required"=>true, "maxlength"=>30]]);?>
+    <?php render_input(["type"=>"password", "id"=>"password", "name"=>"password", "label"=>"Password", "rules"=>["required"=>true, "minlength"=>8]]);?>
+    <?php render_input(["type"=>"password", "id"=>"confirm", "name"=>"confirm", "label"=>"Confirm Password", "rules"=>["required"=>true,"minlength"=>8]]);?>
+    <?php render_button(["text"=>"Register", "type"=>"submit"]);?>
 </form>
+</div>
 <script>
-    // rev/11-07-2024
     function validate(form) {
-        const email = form.email.value.trim();
-        const username = form.username.value.trim();
-        const password = form.password.value;
-        const confirm = form.confirm.value;
+        //TODO 1: implement JavaScript validation
+        //ensure it returns false for an error and true for success
 
-        // Email validation: simple pattern check
-        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!emailPattern.test(email)) {
-            alert("Please enter a valid email address.");
-            return false;
-        }
-
-        // Username validation: 3-16 characters, only a-z, 0-9, _ or -
-        const usernamePattern = /^[a-zA-Z0-9_-]{3,16}$/;
-        if (!usernamePattern.test(username)) {
-            alert("Username must be 3-16 characters and contain only a-z, 0-9, _, or -");
-            return false;
-        }
-
-        // Password validation: at least 8 characters
-        if (password.length < 8) {
-            alert("Password must be at least 8 characters long.");
-            return false;
-        }
-
-        // Confirm password matches
-        if (password !== confirm) {
-            alert("Passwords do not match.");
-            return false;
-        }
-
-        // All validations passed
         return true;
     }
 </script>
 <?php
-// rev/11-07-2024
+//TODO 2: add PHP Code
 if (isset($_POST["email"]) && isset($_POST["password"]) && isset($_POST["confirm"]) && isset($_POST["username"])) {
-    // Retrieve and sanitize inputs
     $email = se($_POST, "email", "", false);
     $password = se($_POST, "password", "", false);
     $confirm = se($_POST, "confirm", "", false);
     $username = se($_POST, "username", "", false);
-
+    //TODO 3
     $hasError = false;
-
-    // Validate email
+    if (empty($email)) {
+        flash("Email must not be empty", "danger");
+        $hasError = true;
+    }
+    //sanitize
     $email = sanitize_email($email);
-    if (empty($email) || !is_valid_email($email)) {
+    //validate
+    if (!is_valid_email($email)) {
         flash("Invalid email address", "danger");
         $hasError = true;
     }
-
-    // Validate username
     if (!is_valid_username($username)) {
-        flash("Username must be 3-16 characters and contain only a-z, 0-9, _, or -", "danger");
+        flash("Username must only contain 3-16 characters a-z, 0-9, _, or -", "danger");
         $hasError = true;
     }
-
-    // Validate password and confirm password match
-    if (empty($password) || !is_valid_password($password)) {
-        flash("Password must be at least 8 characters long", "danger");
+    if (empty($password)) {
+        flash("password must not be empty", "danger");
         $hasError = true;
-    } elseif ($password !== $confirm) {
+    }
+    if (empty($confirm)) {
+        flash("Confirm password must not be empty", "danger");
+        $hasError = true;
+    }
+    if (!is_valid_password($password)) {
+        flash("Password too short", "danger");
+        $hasError = true;
+    }
+    if (
+        strlen($password) > 0 && $password !== $confirm
+    ) {
         flash("Passwords must match", "danger");
         $hasError = true;
     }
-
-    // If no errors, proceed with registration
     if (!$hasError) {
+        //TODO 4
         $hash = password_hash($password, PASSWORD_BCRYPT);
         $db = getDB();
         $stmt = $db->prepare("INSERT INTO Users (email, password, username) VALUES(:email, :password, :username)");
-
         try {
             $stmt->execute([":email" => $email, ":password" => $hash, ":username" => $username]);
             flash("Successfully registered!", "success");
