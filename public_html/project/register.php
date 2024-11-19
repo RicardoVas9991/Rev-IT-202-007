@@ -2,15 +2,25 @@
 require(__DIR__ . "/../../partials/nav.php");
 reset_session();
 ?>
-<div class="container-fluid">
 <form onsubmit="return validate(this)" method="POST">
-    <?php render_input(["type"=>"email", "id"=>"email", "name"=>"email", "label"=>"Email", "rules"=>["required"=>true]]);?>
-    <?php render_input(["type"=>"text", "id"=>"username", "name"=>"username", "label"=>"Username", "rules"=>["required"=>true, "maxlength"=>30]]);?>
-    <?php render_input(["type"=>"password", "id"=>"password", "name"=>"password", "label"=>"Password", "rules"=>["required"=>true, "minlength"=>8]]);?>
-    <?php render_input(["type"=>"password", "id"=>"confirm", "name"=>"confirm", "label"=>"Confirm Password", "rules"=>["required"=>true,"minlength"=>8]]);?>
-    <?php render_button(["text"=>"Register", "type"=>"submit"]);?>
+    <div>
+        <label for="email">Email</label>
+        <input type="email" name="email" required />
+    </div>
+    <div>
+        <label for="username">Username</label>
+        <input type="text" name="username" required maxlength="30" />
+    </div>
+    <div>
+        <label for="pw">Password</label>
+        <input type="password" id="pw" name="password" required minlength="8" />
+    </div>
+    <div>
+        <label for="confirm">Confirm</label>
+        <input type="password" name="confirm" required minlength="8" />
+    </div>
+    <input type="submit" value="Register" />
 </form>
-</div>
 <script>
     function validate(form) {
         //TODO 1: implement JavaScript validation
@@ -21,10 +31,15 @@ reset_session();
 </script>
 <?php
 //TODO 2: add PHP Code
-if (isset($_POST["email"]) && isset($_POST["password"]) && isset($_POST["confirm"]) && isset($_POST["username"])) {
+if (isset($_POST["email"]) && isset($_POST["password"]) && isset($_POST["confirm"])) {
     $email = se($_POST, "email", "", false);
     $password = se($_POST, "password", "", false);
-    $confirm = se($_POST, "confirm", "", false);
+    $confirm = se(
+        $_POST,
+        "confirm",
+        "",
+        false
+    );
     $username = se($_POST, "username", "", false);
     //TODO 3
     $hasError = false;
@@ -51,7 +66,7 @@ if (isset($_POST["email"]) && isset($_POST["password"]) && isset($_POST["confirm
         flash("Confirm password must not be empty", "danger");
         $hasError = true;
     }
-    if (!is_valid_password($password)) {
+    if (is_valid_password($password)) {
         flash("Password too short", "danger");
         $hasError = true;
     }
