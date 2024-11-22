@@ -70,8 +70,9 @@ if (isset($_POST["email"]) && isset($_POST["password"]) && isset($_POST["confirm
 
     $hasError = false;
 
-    // Validate email
+    //Sanitize email - rev/11-07-2024
     $email = sanitize_email($email);
+    // Validate email
     if (empty($email) || !is_valid_email($email)) {
         flash("Invalid email address", "danger");
         $hasError = true;
