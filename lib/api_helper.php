@@ -124,6 +124,7 @@ function fetchAPIData() {
     return $data["results"] ?? []; // Adjust based on your API response structure
 }
 
+// rev/11-20-2024
 function processAPIData($apiData) {
     $db = getDB();
 
@@ -164,6 +165,7 @@ function processAPIData($apiData) {
     flash("API data processed successfully!", "success");
 }
 
+// rev/11-20-2024
 if (isset($_POST["fetch_api"])) {
     $apiData = fetchAPIData();
     if (!empty($apiData)) {

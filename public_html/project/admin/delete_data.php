@@ -1,5 +1,5 @@
-// rev/11-20-2024
 <?php
+// rev/11-20-2024
 require_once(__DIR__ . "/../../partials/nav.php");
 is_logged_in(true);
 
@@ -28,3 +28,4 @@ try {
 } catch (PDOException $e) {
     flash("An error occurred while deleting the entity.", "danger");
 }
+?>

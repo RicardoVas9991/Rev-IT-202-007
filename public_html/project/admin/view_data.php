@@ -1,7 +1,7 @@
-// rev/11-20-2024
 <?php
 require_once(__DIR__ . "/../../partials/nav.php");
 is_logged_in(true);
+// rev/11-20-2024
 
 $id = se($_GET, "id", null, false);
 if (!$id) {

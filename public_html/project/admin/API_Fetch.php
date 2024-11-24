@@ -1,3 +1,4 @@
+<?php
 // rev/11-20-2024
 function fetch_api_data() {
     $db = getDB();
@@ -16,3 +17,4 @@ function fetch_api_data() {
         ]);
     }
 }
+?>

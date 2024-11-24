@@ -1,7 +1,7 @@
-// rev/11-20-2024
 <?php
 require_once(__DIR__ . "/../../partials/nav.php");
 is_logged_in(true); // Ensure only logged-in users can create entries
+// rev/11-20-2024
 
 if (isset($_POST["create"])) {
     $title = se($_POST, "title", "", false);
