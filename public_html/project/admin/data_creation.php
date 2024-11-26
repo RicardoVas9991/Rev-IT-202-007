@@ -1,5 +1,5 @@
 <?php
-require_once(__DIR__ . "/../../partials/nav.php");
+require(__DIR__ . "/../../partials/nav.php");
 is_logged_in(true); // Ensure only logged-in users can create entries
 // rev/11-20-2024
 

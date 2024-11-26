@@ -1,6 +1,6 @@
 <?php
 // rev/11-20-2024
-require_once(__DIR__ . "/../../partials/nav.php");
+require(__DIR__ . "/../../partials/nav.php");
 is_logged_in(true);
 
 $id = se($_GET, "id", null, false);
