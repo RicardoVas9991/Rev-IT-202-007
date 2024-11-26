@@ -1,5 +1,5 @@
 <?php
-require(__DIR__ . "/../../partials/nav.php");
+require(__DIR__ . "/../../../partials/nav.php");
 is_logged_in(true); // Ensure only logged-in users can create entries
 // rev/11-20-2024
 
@@ -38,4 +38,4 @@ if (isset($_POST["create"])) {
     <input type="date" name="release_date" required />
     <button type="submit" name="create">Create Entity</button>
 </form>
-<?php require_once(__DIR__ . "/../../partials/flash.php"); ?>
+<?php require_once(__DIR__ . "/../../../partials/flash.php"); ?>

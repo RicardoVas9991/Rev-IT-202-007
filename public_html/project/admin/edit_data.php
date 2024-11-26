@@ -1,6 +1,6 @@
 <?php
 // rev/11-20-2024
-require(__DIR__ . "/../../partials/nav.php");
+require(__DIR__ . "/../../../partials/nav.php");
 is_logged_in(true);
 
 $id = se($_GET, "id", null, false);
@@ -53,4 +53,4 @@ if (isset($_POST["save"])) {
     <input type="date" name="release_date" value="<?php se($data, "release_date"); ?>" required />
     <button type="submit" name="save">Save Changes</button>
 </form>
-<?php require_once(__DIR__ . "/../../partials/flash.php"); ?>
+<?php require_once(__DIR__ . "/../../../partials/flash.php"); ?>
