@@ -6,7 +6,7 @@ is_logged_in(true);
 $id = se($_GET, "id", null, false);
 if (!$id) {
     flash("Invalid ID", "danger");
-    die(header("Location: data_list.php"));
+    exit(header("Location: data_list.php"));
 }
 
 $db = getDB();
@@ -16,7 +16,7 @@ $data = $stmt->fetch(PDO::FETCH_ASSOC);
 
 if (!$data) {
     flash("Entity not found", "danger");
-    die(header("Location: data_list.php"));
+    exit(header("Location: data_list.php"));
 }
 
 if (isset($_POST["save"])) {

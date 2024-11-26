@@ -67,7 +67,9 @@ session_start();
                             <li><a class="dropdown-item" href="<?php echo get_url('admin/data_creation.php'); ?>">Create Data</a></li>
                             <li><a class="dropdown-item" href="<?php echo get_url('admin/data_list.php'); ?>">List Data</a></li>
                             <li><a class="dropdown-item" href="<?php echo get_url('admin/view_data.php'); ?>">View Data</a></li>
-                            li><a class="dropdown-item" href="<?php echo get_url('admin/API_Fetch.php'); ?>">Fetch API</a></li>
+                            <li><a class="dropdown-item" href="<?php echo get_url('admin/edit_data.php'); ?>">Edit Data</a></li>
+                            <li><a class="dropdown-item" href="<?php echo get_url('admin/delete_data.php'); ?>">Delete Data</a></li>
+                            <li><a class="dropdown-item" href="<?php echo get_url('admin/API_Fetch.php'); ?>">Fetch API</a></li>
                         </ul>
                     </li>
                 <?php endif; ?>
