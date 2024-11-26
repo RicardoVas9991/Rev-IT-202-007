@@ -39,12 +39,12 @@ session_start();
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <?php if (is_logged_in()) : ?>
-                    <li class="nav-item"><a class="nav-link" href="<?php echo get_url('home.php'); ?>">Home</a></li>
-                    <li class="nav-item"><a class="nav-link" href="<?php echo get_url('profile.php'); ?>">Profile</a></li>
+                    <li><a href="<?php echo get_url('home.php'); ?>">Home</a></li>
+                    <li><a href="<?php echo get_url('profile.php'); ?>">Profile</a></li>
                 <?php endif; ?>
                 <?php if (!is_logged_in()) : ?>
-                    <li class="nav-item"><a class="nav-link" href="<?php echo get_url('login.php'); ?>">Login</a></li>
-                    <li class="nav-item"><a class="nav-link" href="<?php echo get_url('register.php'); ?>">Register</a></li>
+                    <li><a href="<?php echo get_url('login.php'); ?>">Login</a></li>
+                    <li><a href="<?php echo get_url('register.php'); ?>">Register</a></li>
                 <?php endif; ?>
                 <?php if (has_role("Admin")) : ?>
                     <li class="nav-item dropdown">
@@ -52,9 +52,9 @@ session_start();
                             Admin
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="<?php echo get_url('admin/create_role.php'); ?>">Create Role</a></li>
-                            <li><a class="dropdown-item" href="<?php echo get_url('admin/list_roles.php'); ?>">List Roles</a></li>
-                            <li><a class="dropdown-item" href="<?php echo get_url('admin/assign_roles.php'); ?>">Assign Roles</a></li>
+                        <li><a href="<?php echo get_url('admin/create_role.php'); ?>">Create Role</a></li>
+                        <li><a href="<?php echo get_url('admin/list_roles.php'); ?>">List Roles</a></li>
+                        <li><a href="<?php echo get_url('admin/assign_roles.php'); ?>">Assign Roles</a></li>
                         </ul>
                     </li>
                 <?php endif; ?>
@@ -64,12 +64,12 @@ session_start();
                             Stock Management
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="<?php echo get_url('admin/data_creation.php'); ?>">Create Data</a></li>
-                            <li><a class="dropdown-item" href="<?php echo get_url('admin/data_list.php'); ?>">List Data</a></li>
-                            <li><a class="dropdown-item" href="<?php echo get_url('admin/view_data.php'); ?>">View Data</a></li>
-                            <li><a class="dropdown-item" href="<?php echo get_url('admin/edit_data.php'); ?>">Edit Data</a></li>
-                            <li><a class="dropdown-item" href="<?php echo get_url('admin/delete_data.php'); ?>">Delete Data</a></li>
-                            <li><a class="dropdown-item" href="<?php echo get_url('admin/API_Fetch.php'); ?>">Fetch API</a></li>
+                            <li><a href="<?php echo get_url('admin/data_creation.php'); ?>">Create Data</a></li>
+                            <li><a href="<?php echo get_url('admin/data_list.php'); ?>">List Data</a></li>
+                            <li><a href="<?php echo get_url('admin/view_data.php'); ?>">View Data</a></li>
+                            <li><a href="<?php echo get_url('admin/edit_data.php'); ?>">Edit Data</a></li>
+                            <li><a href="<?php echo get_url('admin/delete_data.php'); ?>">Delete Data</a></li>
+                            <li><a href="<?php echo get_url('admin/API_Fetch.php'); ?>">Fetch API</a></li>
                         </ul>
                     </li>
                 <?php endif; ?>
