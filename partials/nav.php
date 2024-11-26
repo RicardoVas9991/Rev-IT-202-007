@@ -5,7 +5,7 @@ $domain = $_SERVER["HTTP_HOST"];
 if (strpos($domain, ":")) {
     $domain = explode(":", $domain)[0];
 }
-$localWorks = true; //some people have issues with localhost for the cookie params
+$localWorks = false; //some people have issues with localhost for the cookie params
 //if you're one of those people make this false
 
 //this is an extra condition added to "resolve" the localhost issue for the session cookie
@@ -55,6 +55,19 @@ session_start();
                             <li><a class="dropdown-item" href="<?php echo get_url('admin/create_role.php'); ?>">Create Role</a></li>
                             <li><a class="dropdown-item" href="<?php echo get_url('admin/list_roles.php'); ?>">List Roles</a></li>
                             <li><a class="dropdown-item" href="<?php echo get_url('admin/assign_roles.php'); ?>">Assign Roles</a></li>
+                        </ul>
+                    </li>
+                <?php endif; ?>
+                <?php if (has_role("Admin")) : ?>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Stock Management
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="<?php echo get_url('admin/data_creation.php'); ?>">Create Data</a></li>
+                            <li><a class="dropdown-item" href="<?php echo get_url('admin/data_list.php'); ?>">List Data</a></li>
+                            <li><a class="dropdown-item" href="<?php echo get_url('admin/view_data.php'); ?>">View Data</a></li>
+                            li><a class="dropdown-item" href="<?php echo get_url('admin/API_Fetch.php'); ?>">Fetch API</a></li>
                         </ul>
                     </li>
                 <?php endif; ?>

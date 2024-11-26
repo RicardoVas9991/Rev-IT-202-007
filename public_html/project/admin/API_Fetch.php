@@ -2,7 +2,7 @@
 // rev/11-20-2024
 function fetch_api_data() {
     $db = getDB();
-    $api_url = "https://api.example.com/media";
+    $api_url = "https://rapidapi.com/utelly/api/utelly";
     $response = file_get_contents($api_url);
     $data = json_decode($response, true);
 
