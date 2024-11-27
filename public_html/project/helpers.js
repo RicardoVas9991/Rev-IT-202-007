@@ -19,8 +19,8 @@ function isValidUsername (username) {
     return pattern.test(username);
 }
 function isValidEmail (email) {
-    //TODO you implement this
-    return true;
+    const pattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return pattern.test(email);
 }
 function isValidPassword (password) {
     if (!password) {
