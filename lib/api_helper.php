@@ -178,4 +178,3 @@ if (isset($_POST["fetch_api"])) {
 <form method="POST">
     <button type="submit" name="fetch_api">Fetch API Data</button>
 </form>
-<?php require_once(__DIR__ . "/../../../partials/footer.php"); ?>
