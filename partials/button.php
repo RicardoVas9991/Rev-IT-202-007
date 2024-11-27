@@ -4,19 +4,19 @@
     $_btn_type = se($data, "type", "button", false);
     $_btn_text = se($data, "text", "Button", false);
     $_btn_color = se($data, "color", "primary", false);
-    //TODO add support for onClick
+    $_btn_onclick = se($data, "onClick", "", false); // Retrieve onClick attribute if provided
     ?>
     <?php if ($_btn_type === "button") : ?>
-        <button class="btn btn-<?php se($_btn_color); ?>"><?php se($_btn_text); ?></button>
+        <button class="btn btn-<?php se($_btn_color); ?>" <?php if ($_btn_onclick) : ?>onclick="<?php se($_btn_onclick); ?>"<?php endif; ?>><?php se($_btn_text); ?></button>
     <?php elseif ($_btn_type === "submit") : ?>
-        <input type="submit" class="btn btn-<?php se($_btn_color); ?>" value="<?php se($_btn_text); ?>" />
+        <input type="submit" class="btn btn-<?php se($_btn_color); ?>" value="<?php se($_btn_text); ?>" <?php if ($_btn_onclick) : ?>onclick="<?php se($_btn_onclick); ?>"<?php endif; ?> />
     <?php endif; ?>
 
     <?php
     //cleanup just in case this is used directly instead of via render_button()
-    // if it's used from the function, the variables will be out of scope when the function is done so there'd be no need to unset them
     unset($_btn_type);
-    unset($_btn_btn_text_type);
+    unset($_btn_text);
     unset($_btn_color);
+    unset($_btn_onclick); // Cleanup onClick
     ?>
 <?php endif; ?>
