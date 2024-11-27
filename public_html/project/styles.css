@@ -1,3 +1,7 @@
+label{
+    text-transform: capitalize;
+}
+
 .alert-success {
     background-color: green
 }

@@ -30,3 +30,4 @@ function getDB()
     }
     return $db;
 }
+?>
