@@ -1,5 +1,5 @@
 <?php
-
+// rev - 11/25/2024
 function get_columns($table)
 {
     $table = se($table, null, null, false);

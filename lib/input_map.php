@@ -1,5 +1,5 @@
 <?php
-
+// rev - 11/25/2024
 function input_map($fieldType)
 {
     if (str_contains($fieldType, "varchar")) { //needed since varchars have a size
