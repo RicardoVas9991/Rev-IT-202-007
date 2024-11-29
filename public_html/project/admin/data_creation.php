@@ -37,7 +37,6 @@ if (isset($_POST["create"])) {
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Admin Data Creation</title>
 </head>
-
 <style>
   body {
     -webkit-text-size-adjust: 100%;
@@ -61,3 +60,5 @@ if (isset($_POST["create"])) {
   </form>
 </body>
 </html>
+<?php require_once(__DIR__ . "/../../../partials/flash.php"); ?>
+
