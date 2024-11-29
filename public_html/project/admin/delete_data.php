@@ -1,3 +1,5 @@
+<!DOCTYPE html>
+<html lang="en">
 <?php
 // rev/11-20-2024
 require(__DIR__ . "/../../../partials/nav.php");

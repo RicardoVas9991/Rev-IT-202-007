@@ -94,6 +94,8 @@ if (isset($_POST["fetch_api"])) {
     }
 }
 ?>
+<!DOCTYPE html>
+<html lang="en">
 <form method="POST">
     <button type="submit" name="fetch_api">Fetch API Data</button>
 </form>

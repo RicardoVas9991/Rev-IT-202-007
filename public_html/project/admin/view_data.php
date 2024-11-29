@@ -20,6 +20,8 @@ if (!$data) {
 }
 
 ?>
+<!DOCTYPE html>
+<html lang="en">
 <h3><?php se($data, "title"); ?></h3>
 <p><?php se($data, "description"); ?></p>
 <p>Release Date: <?php se($data, "release_date"); ?></p>

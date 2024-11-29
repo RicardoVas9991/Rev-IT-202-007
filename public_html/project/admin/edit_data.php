@@ -43,6 +43,8 @@ if (isset($_POST["save"])) {
     }
 }
 ?>
+<!DOCTYPE html>
+<html lang="en">
 <h3>Edit Entity</h3>
 <form method="POST">
     <label>Title:</label>
