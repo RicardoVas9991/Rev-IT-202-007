@@ -31,11 +31,11 @@ if (isset($_POST["create"])) {
 ?>
 <form method="POST">
     <label>Title:</label>
-    <input type="text" name="title" required />
+    <input type="text" name="title" required="">
     <label>Description:</label>
-    <textarea name="description" required></textarea>
+    <textarea name="description" required=""></textarea>
     <label>Release Date:</label>
-    <input type="date" name="release_date" required />
+    <input type="date" name="release_date" required="">
     <button type="submit" name="create">Create Entity</button>
 </form>
 <?php require_once(__DIR__ . "/../../../partials/flash.php"); ?>
