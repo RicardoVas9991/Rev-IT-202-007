@@ -33,16 +33,18 @@ if (isset($_POST["create"])) {
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Admin Data Creation</title>
 </head>
+
 <style>
   body {
     -webkit-text-size-adjust: 100%;
     text-size-adjust: 100%;
   }
 </style>
+
 <body>
   <form action="/submit" method="post">
     <label for="title">Title</label>
