@@ -27,27 +27,35 @@ if (isset($_POST["create"])) {
             flash("An unexpected error occurred.", "danger");
         }
     }
+    
 }
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8">
   <title>Admin Data Creation</title>
 </head>
+<style>
+  body {
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+  }
+</style>
 <body>
   <form action="/submit" method="post">
     <label for="title">Title</label>
-    <input type="text" id="title" name="title" required placeholder="Enter title">
+    <input type="text" id="title" name="title" required placeholder="Enter the title of the entity">
 
     <label for="description">Description</label>
-    <textarea id="description" name="description" required placeholder="Enter description"></textarea>
+    <textarea id="description" name="description" required placeholder="Provide a brief description"></textarea>
 
     <label for="release_date">Release Date</label>
-    <input type="date" id="release_date" name="release_date" required>
+    <input type="date" id="release_date" name="release_date" required title="Select the release date">
 
-    <button type="submit">Submit</button>
+    <button type="submit" name="create">Create</button>
+    <div id="flash"></div>
   </form>
 </body>
 </html>
