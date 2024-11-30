@@ -20,8 +20,6 @@ $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
 if ($results):
     foreach ($results as $r):
 ?>
-<!DOCTYPE html>
-<html lang="en">
         <div>
             <h3><?php se($r, "title"); ?></h3>
             <p><?php se($r, "description"); ?></p>
