@@ -8,8 +8,6 @@ if (strpos($domain, ":")) {
 }
 $isSecure = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') || $_SERVER['SERVER_PORT'] == 443;
 
-//this is an extra condition added to "resolve" the localhost issue for the session cookie
-if (($localWorks && $domain == "localhost") || $domain != "localhost") {
 session_set_cookie_params([
     "lifetime" => 60 * 60,
     "path" => $BASE_PATH,
@@ -18,10 +16,7 @@ session_set_cookie_params([
     "httponly" => true,
     "samesite" => "lax"
 ]);
-}
 session_start();
-
-
 ?>
 
 <!-- Bootstrap CSS/JS -->
