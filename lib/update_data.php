@@ -1,5 +1,3 @@
-<!DOCTYPE html>
-<html lang="en">
 <?php
 // rev - 11/25/2024
 function update_data($table, $id,  $data, $ignore = ["id", "submit"])
