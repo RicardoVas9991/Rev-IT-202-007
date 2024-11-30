@@ -11,3 +11,6 @@ CREATE TABLE MediaEntities (
     user_id INT, -- Foreign key to Users table for manual entries
     CONSTRAINT UC_MediaEntity UNIQUE (api_id) -- Prevent duplicate API entries
 );
+
+-- rev/11-30-2024, Add is_deleted column for soft delete support
+ALTER TABLE MediaEntities ADD COLUMN is_deleted TINYINT(1) DEFAULT 0;
