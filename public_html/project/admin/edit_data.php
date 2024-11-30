@@ -43,6 +43,7 @@ if (isset($_POST["save"])) {
     }
 }
 ?>
+<div class="container-fluid">
 <h3>Edit Entity</h3>
 <form method="POST">
     <label>Title:</label>
@@ -53,4 +54,5 @@ if (isset($_POST["save"])) {
     <input type="date" name="release_date" value="<?php se($data, "release_date"); ?>" required />
     <button type="submit" name="save">Save Changes</button>
 </form>
+</div>
 <?php require_once(__DIR__ . "/../../../partials/flash.php"); ?>

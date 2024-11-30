@@ -20,7 +20,8 @@ $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
 if ($results):
     foreach ($results as $r):
 ?>
-        <div>
+        <div class="container-fluid">
+        <h1>Data List</h1>
             <h3><?php se($r, "title"); ?></h3>
             <p><?php se($r, "description"); ?></p>
             <a href="view_data.php?id=<?php se($r, "id"); ?>">View</a>
