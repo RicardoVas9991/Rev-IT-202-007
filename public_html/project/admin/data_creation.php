@@ -1,8 +1,8 @@
 <?php
 require(__DIR__ . "/../../../partials/nav.php");
 
-// Ensure the user is logged in and has Admin role
-if (!has_role("Admin")) {
+// Ensure the user is logged in - rev/11-20-2024
+if (is_logged_in(true)) {
     flash("You don't have permission to view this page", "warning");
     exit(header("Location: $BASE_PATH" . "/home.php"));
 }
