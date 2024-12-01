@@ -8,6 +8,12 @@ if (isset($_POST["action"])) {
     $title = se($_POST, "title", "", false);
     $description = se($_POST, "description", "", false);
     $release_date = se($_POST, "release_date", "", false);
+    $user_id = get_user_id();
+    if (!$user_id) {
+        error_log("Form Data: " . var_export($_POST, true));
+        flash("User ID is invalid. Please log in again.", "danger");
+        return;
+    }
 
     if ($action === "create") {
         if ($title && $description && $release_date) {
@@ -16,18 +22,19 @@ if (isset($_POST["action"])) {
             try {
                 $stmt = $db->prepare("INSERT INTO MediaEntities (title, description, release_date, is_api_data, user_id)
                                       VALUES (:title, :description, :release_date, :is_api_data, :user_id)");
-                $stmt->execute([
+                $params = [
                     ":title" => $title,
                     ":description" => $description,
                     ":release_date" => $release_date,
                     ":is_api_data" => false,
                     ":user_id" => get_user_id()
-                ]);
+                ];
+                error_log("SQL Query: " . $stmt->queryString);
+                error_log("SQL Params: " . var_export($params, true));
+                $stmt->execute($params);
                 flash("Media entity created successfully!", "success");
             } catch (PDOException $e) {
-                error_log("PDO Exception: " . $e->getMessage());  // Log the error message
-                error_log("SQL State: " . $e->getCode());  // Log the error code
-                error_log("Error Info: " . var_export($e->errorInfo, true));  // Log the error details
+                error_log("PDO Exception: " . $e->getMessage());
                 flash("An unexpected error occurred. Please try again.", "danger");
             }
         } else {
