@@ -25,12 +25,10 @@ if (isset($_POST["action"])) {
                 ]);
                 flash("Media entity created successfully!", "success");
             } catch (PDOException $e) {
-                if ($e->errorInfo[1] === 1062) {
-                    flash("This media entity already exists.", "warning");
-                } else {
-                    error_log("Error inserting media entity: " . var_export($e->errorInfo, true));
-                    flash("An unexpected error occurred. Please try again.", "danger");
-                }
+                error_log("PDO Exception: " . $e->getMessage());  // Log the error message
+                error_log("SQL State: " . $e->getCode());  // Log the error code
+                error_log("Error Info: " . var_export($e->errorInfo, true));  // Log the error details
+                flash("An unexpected error occurred. Please try again.", "danger");
             }
         } else {
             flash("All fields are required.", "warning");
