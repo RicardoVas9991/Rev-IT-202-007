@@ -5,7 +5,7 @@ is_logged_in(true);
 
 // Function to fetch data from the Utelly API
 function fetchAPIData() {
-    $url = "https://api.example.com/utelly"; // Replace with your actual API URL
+    $url = "https://rapidapi.com/utelly/api/utelly"; // Replace with your actual API URL
     $apiKey = "UTELLY_API_KEY"; // Replace with your API key
     
     $ch = curl_init();

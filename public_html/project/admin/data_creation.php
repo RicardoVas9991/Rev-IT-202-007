@@ -10,7 +10,7 @@ if (isset($_POST["action"])) {
     $release_date = se($_POST, "release_date", "", false);
     $user_id = get_user_id();
     if (!$user_id) {
-        error_log("Form Data: " . var_export($_POST, true));
+        error_log("Error: user_id is null or invalid");
         flash("User ID is invalid. Please log in again.", "danger");
         return;
     }
