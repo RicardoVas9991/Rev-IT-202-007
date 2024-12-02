@@ -1,39 +1,33 @@
 <?php
-// rev - 11/25/2024
-function update_data($table, $id,  $data, $ignore = ["id", "submit"])
-{
-    $columns = array_keys($data);
-    //again just another example of removing values from an array
-    //there's no purpose behind my choice between this file and add_data other than demonstration
-    foreach ($columns as $index => $value) {
-        //Note: normally it's bad practice to remove array elements during iteration
+require(__DIR__ . "/../../../partials/nav.php");
+is_logged_in(true);
+// rev/12-02-2024
 
-        //remove id, we'll use this for the WHERE not for the SET
-        //remove submit, it's likely not in your table
-        if (in_array($value, $ignore)) {
-            unset($columns[$index]);
-        }
-    }
-    $query = "UPDATE $table SET "; //be sure you trust $table
-    $cols = [];
-    foreach ($columns as $index => $col) {
-        array_push($cols, "$col = :$col");
-    }
-    $query .= join(",", $cols);
-    $query .= " WHERE id = :id";
+$id = se($_POST, "id", null, false);
+$title = se($_POST, "title", null, false);
+$description = se($_POST, "description", null, false);
+$releaseDate = se($_POST, "release_date", null, false);
 
-    $params = [":id" => $id];
-    foreach ($columns as $col) {
-        $params[":$col"] = se($data, $col, "", false);
-    }
-    $db = getDB();
-    $stmt = $db->prepare($query);
-    try {
-        $stmt->execute($params);
-        return true;
-    } catch (PDOException $e) {
-        error_log(var_export($e->errorInfo, true));
-        flash("Error updating table", "danger");
-        return false;
-    }
+if (!$id || !$title || !$description) {
+    flash("All fields are required", "danger");
+    die(header("Location: edit_data.php?id=$id"));
 }
+
+$db = getDB();
+$stmt = $db->prepare("UPDATE MediaEntities SET title = :title, description = :description, release_date = :release_date, modified = CURRENT_TIMESTAMP WHERE id = :id");
+
+try {
+    $stmt->execute([
+        ":id" => $id,
+        ":title" => $title,
+        ":description" => $description,
+        ":release_date" => $releaseDate
+    ]);
+    flash("Record updated successfully", "success");
+} catch (Exception $e) {
+    flash("Error updating record: " . $e->getMessage(), "danger");
+}
+
+header("Location: view_data.php");
+exit;
+?>

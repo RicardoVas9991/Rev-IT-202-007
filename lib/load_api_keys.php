@@ -1,6 +1,6 @@
 <?php
 // string array containing env keys to lookup (this allows usage of multiple APIs)
-$env_keys = ["UTELLY_API_KEY"]; // rev - 11/21/2024
+$env_keys = ["IMDB_API_KEY"]; // rev - 12/02/2024
 $ini = @parse_ini_file(".env");
 
 $API_KEYS = [];

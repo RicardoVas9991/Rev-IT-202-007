@@ -1,42 +1,40 @@
 <?php
 require(__DIR__ . "/../../../partials/nav.php");
 is_logged_in(true);
-// rev/11-20-2024
+// rev/12-02-2024
 
-// Validate ID
-$id = se($_GET, "id", null, false);
-if (!$id) {
-    flash("Invalid ID", "danger");
-    exit(header("Location: data_list.php"));
-}
-
-// Fetch the entity
 $db = getDB();
-$stmt = $db->prepare("SELECT * FROM MediaEntities WHERE id = :id AND is_deleted = 0");
-$stmt->execute([":id" => $id]);
-$data = $stmt->fetch(PDO::FETCH_ASSOC);
-
-if (!$data) {
-    flash("Entity not found", "danger");
-    exit(header("Location: data_list.php"));
-}
+$stmt = $db->query("SELECT * FROM MediaEntities");
+$results = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
-<div class="container-fluid">
-    <h1>View Entity</h1>
-    <div class="card">
-        <div class="card-header">
-            <h3><?php se($data, "title"); ?></h3>
-        </div>
-        <div class="card-body">
-            <p><strong>Description:</strong></p>
-            <p><?php se($data, "description"); ?></p>
-            <p><strong>Release Date:</strong> <?php se($data, "release_date"); ?></p>
-        </div>
-        <div class="card-footer">
-            <a href="edit_data.php?id=<?php se($data, 'id'); ?>" class="btn btn-primary">Edit</a>
-            <a href="delete_data.php?id=<?php se($data, 'id'); ?>" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this entity?')">Delete</a>
-            <a href="data_list.php" class="btn btn-secondary">Back to List</a>
-        </div>
-    </div>
+<div class="container">
+    <h1>Media Records</h1>
+    <a href="data_creation.php" class="btn btn-success mb-3">Add New Record</a>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Title</th>
+                <th>Description</th>
+                <th>Release Date</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php foreach ($results as $row): ?>
+                <tr>
+                    <td><?php echo se($row, "id"); ?></td>
+                    <td><?php echo se($row, "title"); ?></td>
+                    <td><?php echo se($row, "description"); ?></td>
+                    <td><?php echo se($row, "release_date"); ?></td>
+                    <td>
+                        <a href="edit_data.php?id=<?php echo se($row, 'id'); ?>" class="btn btn-warning">Edit</a>
+                        <a href="delete_data.php?id=<?php echo se($row, 'id'); ?>" class="btn btn-danger" 
+                           onclick="return confirm('Are you sure you want to delete this record?');">Delete</a>
+                    </td>
+                </tr>
+            <?php endforeach; ?>
+        </tbody>
+    </table>
 </div>
 <?php require_once(__DIR__ . "/../../../partials/flash.php"); ?>

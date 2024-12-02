@@ -1,21 +1,12 @@
--- rev/11-20-2024
+-- rev/12-02-2024
 CREATE TABLE MediaEntities (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    title VARCHAR(255) NOT NULL,
+    api_id VARCHAR(255) UNIQUE,
+    title VARCHAR(255),
     description TEXT,
     release_date DATE,
-    api_id VARCHAR(255), -- Null for manual data
-    is_api_data BOOLEAN DEFAULT FALSE, -- True for API data
-    user_id INT, -- Foreign key to Users table for manual entries
-    CONSTRAINT UC_MediaEntity UNIQUE (api_id) -- Prevent duplicate API entries
+    created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
--- rev/11-30-2024, Add is_deleted column for soft delete support
-ALTER TABLE MediaEntities ADD COLUMN is_deleted TINYINT(1) DEFAULT 0;
-ALTER TABLE MediaEntities MODIFY COLUMN is_api_data TINYINT DEFAULT 0;
-DESCRIBE MediaEntities;
-INSERT INTO MediaEntities (title, description, release_date, is_api_data, user_id)
-VALUES ('Test Title', 'Test Description', '2024-11-30', false, 1);
 
