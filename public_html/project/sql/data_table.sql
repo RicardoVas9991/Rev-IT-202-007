@@ -14,6 +14,7 @@ CREATE TABLE MediaEntities (
 
 -- rev/11-30-2024, Add is_deleted column for soft delete support
 ALTER TABLE MediaEntities ADD COLUMN is_deleted TINYINT(1) DEFAULT 0;
+ALTER TABLE MediaEntities MODIFY COLUMN is_api_data TINYINT DEFAULT 0;
 DESCRIBE MediaEntities;
 INSERT INTO MediaEntities (title, description, release_date, is_api_data, user_id)
 VALUES ('Test Title', 'Test Description', '2024-11-30', false, 1);

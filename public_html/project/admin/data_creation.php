@@ -8,6 +8,7 @@ if (isset($_POST["action"])) {
     $title = se($_POST, "title", "", false);
     $description = se($_POST, "description", "", false);
     $release_date = se($_POST, "release_date", "", false);
+    $isApiData = isset($data['is_api_data']) ? (int)$data['is_api_data'] : 0;
     $user_id = get_user_id();
     if (!$user_id) {
         error_log("Error: user_id is null or invalid");
@@ -26,7 +27,7 @@ if (isset($_POST["action"])) {
                     ":title" => $title,
                     ":description" => $description,
                     ":release_date" => $release_date,
-                    ":is_api_data" => false,
+                    ':is_api_data' => $isApiData ? 1 : 0,
                     ":user_id" => get_user_id()
                 ];
                 error_log("SQL Query: " . $stmt->queryString);
