@@ -5,7 +5,7 @@ is_logged_in(true);
 
 // Function to fetch data from the Utelly API
 function fetchAPIData() {
-    $url = "utelly-tv-shows-and-movies-availability-v1.p.rapidapi.com"; // Replace with your actual API URL
+    $url = "https://utelly-tv-shows-and-movies-availability-v1.p.rapidapi.com/lookup?term=bojack&country=uk"; // Replace with your actual API URL
     $apiKey = "8ce4d7dc33msh0821cfb20452b72p1a9a06jsnc33780f8b80b"; // Replace with your API key
     
     $ch = curl_init();
