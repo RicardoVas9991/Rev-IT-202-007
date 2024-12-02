@@ -5,12 +5,12 @@ is_logged_in(true);
 
 // Function to fetch data from the Utelly API
 function fetchAPIData() {
-    $url = "https://utelly-tv-shows-and-movies-availability-v1.p.rapidapi.com/lookup?term=bojack&country=uk"; // Replace with your actual API URL
-    $apiKey = "8ce4d7dc33msh0821cfb20452b72p1a9a06jsnc33780f8b80b"; // Replace with your API key
-    
+    $url = "rapidapi.com";
+    $apiKey = "8ce4d7dc33msh0821cfb20452b72p1a9a06jsnc33780f8b80b";
+
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, $url);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($ch, CURLOPT_HTTPHEADER, [
         "X-RapidAPI-Key: $apiKey",
         "Accept: application/json"
@@ -18,6 +18,7 @@ function fetchAPIData() {
 
     $response = curl_exec($ch);
     if (curl_errno($ch)) {
+        error_log("cURL error: " . curl_error($ch));
         flash("Error fetching data from API: " . curl_error($ch), "danger");
         curl_close($ch);
         return [];
@@ -25,7 +26,12 @@ function fetchAPIData() {
     curl_close($ch);
 
     $data = json_decode($response, true);
-    return $data["results"] ?? []; // Adjust based on API's actual response structure
+    if (!$data || !isset($data["results"])) {
+        error_log("Invalid or empty API response: " . $response);
+        return [];
+    }
+
+    return $data["results"];
 }
 
 // Function to process and store API data in the database
