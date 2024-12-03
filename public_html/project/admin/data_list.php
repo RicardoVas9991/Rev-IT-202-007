@@ -3,50 +3,63 @@ require(__DIR__ . "/../../../partials/nav.php");
 is_logged_in(true);
 // rev/12-02-2024
 
-// Fetch all data from the database
+// Fetch filter/sort parameters from GET request
+$filterTitle = se($_GET, "filter_title", "", false);
+$sortField = se($_GET, "sort_field", "title", false);
+$sortOrder = se($_GET, "sort_order", "ASC", false);
+$limit = max(1, min(se($_GET, "limit", 10, false), 100)); // Default to 10, range 1-100
+
 $db = getDB();
-$stmt = $db->query("SELECT id, title, description, release_date, created FROM MediaEntities ORDER BY created DESC");
+$query = "SELECT * FROM MediaEntities WHERE 1=1";
+$params = [];
+
+// Filter by title
+if ($filterTitle) {
+    $query .= " AND title LIKE :filter_title";
+    $params[":filter_title"] = "%$filterTitle%";
+}
+
+// Add sorting and limit
+$query .= " ORDER BY $sortField $sortOrder LIMIT $limit";
+
+$stmt = $db->prepare($query);
+$stmt->execute($params);
 $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
 ?>
 
 <div class="container">
     <h1>Data List</h1>
-    <a href="data_creation.php" class="btn btn-success mb-3">Create New Record</a>
-    <table class="table table-striped table-bordered">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Title</th>
-                <th>Description</th>
-                <th>Release Date</th>
-                <th>Created</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php if (!empty($results)): ?>
-                <?php foreach ($results as $row): ?>
-                    <tr>
-                        <td><?php echo se($row, "id"); ?></td>
-                        <td><?php echo se($row, "title"); ?></td>
-                        <td><?php echo se($row, "description"); ?></td>
-                        <td><?php echo se($row, "release_date"); ?></td>
-                        <td><?php echo se($row, "created"); ?></td>
-                        <td>
-                            <a href="edit_data.php?id=<?php echo se($row, 'id'); ?>" class="btn btn-warning btn-sm">Edit</a>
-                            <a href="delete_data.php?id=<?php echo se($row, 'id'); ?>" class="btn btn-danger btn-sm" 
-                               onclick="return confirm('Are you sure you want to delete this record?');">Delete</a>
-                            <a href="view_data.php?id=<?php echo se($row, 'id'); ?>" class="btn btn-info btn-sm">View</a>
-                        </td>
-                    </tr>
-                <?php endforeach; ?>
-            <?php else: ?>
-                <tr>
-                    <td colspan="6" class="text-center">No data available</td>
-                </tr>
-            <?php endif; ?>
-        </tbody>
-    </table>
-</div>
+    <form method="GET" class="mb-3">
+        <input type="text" name="filter_title" placeholder="Filter by Title" value="<?= se($filterTitle) ?>">
+        <select name="sort_field">
+            <option value="title" <?= $sortField === "title" ? "selected" : "" ?>>Title</option>
+            <option value="release_date" <?= $sortField === "release_date" ? "selected" : "" ?>>Release Date</option>
+        </select>
+        <select name="sort_order">
+            <option value="ASC" <?= $sortOrder === "ASC" ? "selected" : "" ?>>Ascending</option>
+            <option value="DESC" <?= $sortOrder === "DESC" ? "selected" : "" ?>>Descending</option>
+        </select>
+        <input type="number" name="limit" min="1" max="100" value="<?= se($limit) ?>">
+        <button type="submit" class="btn btn-primary">Apply</button>
+    </form>
 
-<?php require_once(__DIR__ . "/../../../partials/flash.php"); ?>
+    <?php if (count($results) === 0): ?>
+        <p>No results available</p>
+    <?php else: ?>
+        <ul class="list-group">
+            <?php foreach (array_merge($results) as $item): ?>
+                <li class="list-group-item">
+                    <h5><?= se($item, "title") ?></h5>
+                    <p><?= se($item, "description") ?></p>
+                    <a href="view_data.php?id=<?= se($item, "id") ?>" class="btn btn-info">View</a>
+                    <?php if (has_role("Admin")): ?>
+                        <a href="edit_data.php?id=<?= se($item, "id") ?>" class="btn btn-warning">Edit</a>
+                        <a href="delete_data.php?id=<?= se($item, "id") ?>" class="btn btn-danger">Delete</a>
+                    <?php endif; ?>
+                </li>
+            <?php endforeach; ?>
+        </ul>
+    <?php endif; ?>
+</div>
+<?php require(__DIR__ . "/../../../partials/flash.php"); ?>

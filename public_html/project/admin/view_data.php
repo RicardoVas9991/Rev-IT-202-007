@@ -3,10 +3,25 @@ require(__DIR__ . "/../../../partials/nav.php");
 is_logged_in(true);
 // rev/12-02-2024
 
+$id = se($_GET, "id", -1, false);
+if ($id <= 0) {
+    flash("Invalid ID", "danger");
+    header("Location: data_list.php");
+    exit;
+}
+
 $db = getDB();
-$stmt = $db->query("SELECT * FROM MediaEntities");
-$results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+$stmt = $db->prepare("SELECT * FROM MediaEntities WHERE id = :id");
+$stmt->execute([":id" => $id]);
+$entity = $stmt->fetch(PDO::FETCH_ASSOC);
+
+if (!$entity) {
+    flash("No entity found with that ID", "danger");
+    header("Location: data_list.php");
+    exit;
+}
 ?>
+
 <div class="container">
     <h1>Media Records</h1>
     <a href="data_creation.php" class="btn btn-success mb-3">Add New Record</a>

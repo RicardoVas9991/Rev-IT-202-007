@@ -45,16 +45,24 @@ function processAPIData($apiData) {
     $db = getDB();
 
     foreach ($apiData as $entry) {
-        $apiId = se($entry, "movieId", null, false);
+        $apiId = se($entry, "movieId", null, false); // Adjust key based on API response
         $title = se($entry, "name", "Unknown Title", false);
         $description = se($entry, "summary", "No description available.", false);
         $releaseDate = se($entry, "year", null, false);
 
+        // Validate release date - check if it's a valid date or set it as null
+        if (!empty($releaseDate) && !isValidDate($releaseDate)) {
+            // If the release date is invalid, set it to NULL
+            $releaseDate = null;
+        }
+
+        // Check if the record exists
         $stmt = $db->prepare("SELECT id FROM MediaEntities WHERE api_id = :api_id");
         $stmt->execute([":api_id" => $apiId]);
         $exists = $stmt->fetch(PDO::FETCH_ASSOC);
 
         if ($exists) {
+            // Update record
             $stmt = $db->prepare("UPDATE MediaEntities SET 
                                   title = :title, 
                                   description = :description, 
@@ -62,6 +70,7 @@ function processAPIData($apiData) {
                                   modified = CURRENT_TIMESTAMP 
                                   WHERE api_id = :api_id");
         } else {
+            // Insert new record
             $stmt = $db->prepare("INSERT INTO MediaEntities (api_id, title, description, release_date, created) 
                                   VALUES (:api_id, :title, :description, :release_date, CURRENT_TIMESTAMP)");
         }
@@ -76,6 +85,15 @@ function processAPIData($apiData) {
 
     flash("API data processed successfully!", "success");
 }
+
+// Function to validate the release date format
+function isValidDate($date) {
+    // Check if the date is a valid format (e.g., 'YYYY-MM-DD')
+    $format = 'Y'; // only checking year
+    $d = DateTime::createFromFormat($format, $date);
+    return $d && $d->format($format) === $date;
+}
+
 
 // Trigger data fetch and processing on form submission
 if (isset($_POST["fetch_api"])) {

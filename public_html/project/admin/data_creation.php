@@ -12,17 +12,26 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         flash("Title and Description are required", "danger");
     } else {
         $db = getDB();
-        $stmt = $db->prepare("INSERT INTO MediaEntities (title, description, release_date, created) VALUES (:title, :description, :release_date, CURRENT_TIMESTAMP)");
 
+        // Check for duplicate entry based on title
+        $checkStmt = $db->prepare("SELECT COUNT(1) as count FROM MediaEntities WHERE title = :title");
         try {
-            $stmt->execute([
-                ":title" => $title,
-                ":description" => $description,
-                ":release_date" => $releaseDate
-            ]);
-            flash("Record created successfully", "success");
-            header("Location: view_data.php");
-            exit;
+            $checkStmt->execute([":title" => $title]);
+            $result = $checkStmt->fetch(PDO::FETCH_ASSOC);
+            if ($result && $result["count"] > 0) {
+                flash("A record with this title already exists", "danger");
+            } else {
+                // Proceed to insert the new record
+                $stmt = $db->prepare("INSERT INTO MediaEntities (title, description, release_date, created) VALUES (:title, :description, :release_date, CURRENT_TIMESTAMP)");
+                $stmt->execute([
+                    ":title" => $title,
+                    ":description" => $description,
+                    ":release_date" => $releaseDate
+                ]);
+                flash("Record created successfully", "success");
+                header("Location: view_data.php");
+                exit;
+            }
         } catch (Exception $e) {
             flash("Error creating record: " . $e->getMessage(), "danger");
         }
