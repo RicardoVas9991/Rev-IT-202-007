@@ -2,25 +2,15 @@
 require(__DIR__ . "/../../partials/nav.php");
 reset_session();
 ?>
+<div class="container-fluid">
 <form onsubmit="return validate(this)" method="POST">
-    <div>
-        <label for="email">Email</label>
-        <input type="email" name="email" required />
-    </div>
-    <div>
-        <label for="username">Username</label>
-        <input type="text" name="username" required maxlength="30" />
-    </div>
-    <div>
-        <label for="pw">Password</label>
-        <input type="password" id="pw" name="password" required minlength="8" />
-    </div>
-    <div>
-        <label for="confirm">Confirm</label>
-        <input type="password" name="confirm" required minlength="8" />
-    </div>
-    <input type="submit" value="Register" />
+    <?php render_input(["type"=>"email", "id"=>"email", "name"=>"email", "label"=>"Email", "rules"=>["required"=>true]]);?>
+    <?php render_input(["type"=>"text", "id"=>"username", "name"=>"username", "label"=>"Username", "rules"=>["required"=>true, "maxlength"=>30]]);?>
+    <?php render_input(["type"=>"password", "id"=>"password", "name"=>"password", "label"=>"Password", "rules"=>["required"=>true, "minlength"=>8]]);?>
+    <?php render_input(["type"=>"password", "id"=>"confirm", "name"=>"confirm", "label"=>"Confirm Password", "rules"=>["required"=>true,"minlength"=>8]]);?>
+    <?php render_button(["text"=>"Register", "type"=>"submit"]);?>
 </form>
+</div>
 <script>
     // rev/11-07-2024
     function validate(form) {
@@ -70,8 +60,9 @@ if (isset($_POST["email"]) && isset($_POST["password"]) && isset($_POST["confirm
 
     $hasError = false;
 
-    // Validate email
+    //Sanitize email - rev/11-07-2024
     $email = sanitize_email($email);
+    // Validate email
     if (empty($email) || !is_valid_email($email)) {
         flash("Invalid email address", "danger");
         $hasError = true;
@@ -108,5 +99,5 @@ if (isset($_POST["email"]) && isset($_POST["password"]) && isset($_POST["confirm
 }
 ?>
 <?php
-require(__DIR__ . "/../../partials/flash.php");
+require(__DIR__ . "/../../partials/footer.php");
 ?>

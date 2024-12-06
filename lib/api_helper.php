@@ -1,5 +1,5 @@
 <?php
-require_once(__DIR__ . "/load_api_keys.php");
+require(__DIR__ . "/load_api_keys.php");
 /**
  * Send a request to the specified URL with the given method.
  * 
