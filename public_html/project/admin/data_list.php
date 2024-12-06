@@ -52,7 +52,7 @@ $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 <li class="list-group-item">
                     <h5><?= se($item, "title") ?></h5>
                     <p><?= se($item, "description") ?></p>
-                    <p>Release Date: <?php se($r, "release_date"); ?></p>
+                    <p>Release Date: <?= se($item, "release_date"); ?></p>
                     <a href="view_data.php?id=<?= se($item, "id") ?>" class="btn btn-info">View</a>
                     <a href="edit_data.php?id=<?= se($item, "id") ?>" class="btn btn-warning">Edit</a>
                     <a href="delete_data.php?id=<?= se($item, "id") ?>" class="btn btn-danger"
