@@ -3,16 +3,6 @@ require(__DIR__ . "/../../../partials/nav.php");
 is_logged_in(true);
 // rev/12-02-2024
 
-// Check if ID is provided via GET
-$id = se($_GET, "id", -1, false);
-
-// Validate the ID
-if (!is_numeric($id) || $id <= 0) {
-    flash("Invalid ID", "danger");
-    header("Location: data_list.php");
-    exit;
-}
-
 $db = getDB();
 
 // Verify that the record exists and belongs to the current user
