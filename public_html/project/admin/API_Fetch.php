@@ -5,38 +5,14 @@ is_logged_in(true);
 
 // Function to fetch data from the Utelly API
 function fetchAPIData() {
-    // $url = "utelly-tv-shows-and-movies-availability-v1.p.rapidapi.com";
-    // $apiKey = "8ce4d7dc33msh0821cfb20452b72p1a9a06jsnc33780f8b80b";
-
-    // $ch = curl_init();
-    // curl_setopt($ch, CURLOPT_URL, $url);
-    // curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    // curl_setopt($ch, CURLOPT_HTTPHEADER, [
-    //     "X-RapidAPI-Key: $apiKey",
-    //     "Accept: application/json"
-    // ]);
-
-    // $response = curl_exec($ch);
-    // if (curl_errno($ch)) {
-    //     error_log("cURL error: " . curl_error($ch));
-    //     flash("Error fetching data from API: " . curl_error($ch), "danger");
-    //     curl_close($ch);
-    //     return [];
-    // }
-    // curl_close($ch);
+   
     $data = [];
     $endpoint = "https://imdb188.p.rapidapi.com/api/v1/searchIMDB";
     $isRapidAPI = true;
     $rapidAPIHost = "imdb188.p.rapidapi.com";
     $result = get($endpoint, "IMDB_API_KEY", $data, $isRapidAPI, $rapidAPIHost);
     error_log("Response: " . var_export($result, true));
-    // $data = json_decode($response, true);
-    // if (!$data || !isset($data["results"])) {
-    //     error_log("Invalid or empty API response: " . $response);
-    //     return [];
-    // }
-
-    // return $data["results"];
+    
     return $result;
 }
 
@@ -50,10 +26,25 @@ function processAPIData($apiData) {
         $description = se($entry, "summary", "No description available.", false);
         $releaseDate = se($entry, "year", null, false);
 
-        // Validate release date - check if it's a valid date or set it as null
+        if ($apiId !== null && strlen($apiId) > 255) {
+            error_log("Truncated api_id: Original value: $apiId");
+            $apiId = substr($apiId, 0, 255);
+        }
+        
+        if (empty($apiId)) {
+            error_log("Skipping entry due to missing api_id.");
+            continue; // Skip entries without a valid api_id
+        }
+
+        // Truncate api_id if it exceeds 255 characters
+        if ($title !== null && strlen($title) > 255) {
+            error_log("Truncated title: Original value: $title");
+            $title = substr($title, 0, 255);
+        }
+
+        // Validate release date
         if (!empty($releaseDate) && !isValidDate($releaseDate)) {
-            // If the release date is invalid, set it to NULL
-            $releaseDate = null;
+            $releaseDate = null; // Set to null if invalid
         }
 
         // Check if the record exists
@@ -62,7 +53,6 @@ function processAPIData($apiData) {
         $exists = $stmt->fetch(PDO::FETCH_ASSOC);
 
         if ($exists) {
-            // Update record
             $stmt = $db->prepare("UPDATE MediaEntities SET 
                                   title = :title, 
                                   description = :description, 
@@ -70,7 +60,6 @@ function processAPIData($apiData) {
                                   modified = CURRENT_TIMESTAMP 
                                   WHERE api_id = :api_id");
         } else {
-            // Insert new record
             $stmt = $db->prepare("INSERT INTO MediaEntities (api_id, title, description, release_date, created) 
                                   VALUES (:api_id, :title, :description, :release_date, CURRENT_TIMESTAMP)");
         }
@@ -85,6 +74,7 @@ function processAPIData($apiData) {
 
     flash("API data processed successfully!", "success");
 }
+
 
 // Function to validate the release date format
 function isValidDate($date) {
@@ -104,6 +94,9 @@ if (isset($_POST["fetch_api"])) {
         flash("No data returned from API", "danger");
     }
 }
+
+
+
 ?>
 <div class="container">
     <h1>Fetch API Data</h1>

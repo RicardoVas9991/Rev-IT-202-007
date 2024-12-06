@@ -43,6 +43,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
 <div class="container">
     <h1>Edit Record</h1>
+    <a href="data_list.php" class="btn btn-secondary mb-3">Back to List</a>
     <form method="POST">
         <div class="mb-3">
             <label for="title" class="form-label">Title</label>

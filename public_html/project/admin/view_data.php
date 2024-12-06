@@ -23,33 +23,28 @@ if (!$entity) {
 ?>
 
 <div class="container">
-    <h1>Media Records</h1>
-    <a href="data_creation.php" class="btn btn-success mb-3">Add New Record</a>
+    <h1>View Media Record</h1>
+    <a href="data_list.php" class="btn btn-secondary mb-3">Back to List</a>
     <table class="table table-bordered">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Title</th>
-                <th>Description</th>
-                <th>Release Date</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php foreach ($results as $row): ?>
-                <tr>
-                    <td><?php echo se($row, "id"); ?></td>
-                    <td><?php echo se($row, "title"); ?></td>
-                    <td><?php echo se($row, "description"); ?></td>
-                    <td><?php echo se($row, "release_date"); ?></td>
-                    <td>
-                        <a href="edit_data.php?id=<?php echo se($row, 'id'); ?>" class="btn btn-warning">Edit</a>
-                        <a href="delete_data.php?id=<?php echo se($row, 'id'); ?>" class="btn btn-danger" 
-                           onclick="return confirm('Are you sure you want to delete this record?');">Delete</a>
-                    </td>
-                </tr>
-            <?php endforeach; ?>
-        </tbody>
+        <tr>
+            <th>ID</th>
+            <td><?php echo se($entity, "id"); ?></td>
+        </tr>
+        <tr>
+            <th>Title</th>
+            <td><?php echo se($entity, "title"); ?></td>
+        </tr>
+        <tr>
+            <th>Description</th>
+            <td><?php echo se($entity, "description"); ?></td>
+        </tr>
+        <tr>
+            <th>Release Date</th>
+            <td><?php echo se($entity, "release_date"); ?></td>
+        </tr>
     </table>
+    <a href="edit_data.php?id=<?php echo se($entity, 'id'); ?>" class="btn btn-warning">Edit</a>
+    <a href="delete_data.php?id=<?php echo se($entity, 'id'); ?>" class="btn btn-danger" 
+       onclick="return confirm('Are you sure you want to delete this record?');">Delete</a>
 </div>
 <?php require_once(__DIR__ . "/../../../partials/flash.php"); ?>
