@@ -42,9 +42,15 @@ function processAPIData($apiData) {
             $title = substr($title, 0, 255);
         }
 
+        if (empty($title)) {
+            error_log("Skipping entry due to missing title.");
+            continue; // Skip entries without a valid title
+        }
+
         // Validate release date
-        if (!empty($releaseDate) && !isValidDate($releaseDate)) {
-            $releaseDate = null; // Set to null if invalid
+        if (!empty($releaseDate) && !isValidDate($releaseDate) > 255) {
+            error_log("Truncated title: Original value: $$releaseDate");
+            $releaseDate = substr($releaseDate, 0, 255);
         }
 
         // Check if the record exists

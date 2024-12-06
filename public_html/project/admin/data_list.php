@@ -52,14 +52,29 @@ $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 <li class="list-group-item">
                     <h5><?= se($item, "title") ?></h5>
                     <p><?= se($item, "description") ?></p>
+                    <p>Release Date: <?php se($r, "release_date"); ?></p>
                     <a href="view_data.php?id=<?= se($item, "id") ?>" class="btn btn-info">View</a>
-                    <?php if (has_role("Admin")): ?>
-                        <a href="edit_data.php?id=<?= se($item, "id") ?>" class="btn btn-warning">Edit</a>
-                        <a href="delete_data.php?id=<?= se($item, "id") ?>" class="btn btn-danger">Delete</a>
-                    <?php endif; ?>
+                    <a href="edit_data.php?id=<?= se($item, "id") ?>" class="btn btn-warning">Edit</a>
+                    <a href="delete_data.php?id=<?= se($item, "id") ?>" class="btn btn-danger"
+                        onclick="return confirm('Are you sure you want to delete this record?');">Delete</a>
                 </li>
             <?php endforeach; ?>
         </ul>
     <?php endif; ?>
+    <nav>
+        <ul class="pagination">
+            <?php if ($page > 1): ?>
+                <li><a href="?page=<?php echo $page - 1; ?>&limit=<?php echo $limit; ?>&filter=<?php se($_GET, 'filter'); ?>">Previous</a></li>
+            <?php endif; ?>
+            <?php for ($i = 1; $i <= $totalPages; $i++): ?>
+                <li <?php if ($i === $page) echo 'class="active"'; ?>>
+                    <a href="?page=<?php echo $i; ?>&limit=<?php echo $limit; ?>&filter=<?php se($_GET, 'filter'); ?>"><?php echo $i; ?></a>
+                </li>
+            <?php endfor; ?>
+            <?php if ($page < $totalPages): ?>
+                <li><a href="?page=<?php echo $page + 1; ?>&limit=<?php echo $limit; ?>&filter=<?php se($_GET, 'filter'); ?>">Next</a></li>
+            <?php endif; ?>
+        </ul>
+    </nav>
 </div>
 <?php require(__DIR__ . "/../../../partials/flash.php"); ?>

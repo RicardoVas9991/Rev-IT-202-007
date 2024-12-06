@@ -40,20 +40,27 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 ?>
 <div class="container">
     <h1>Create New Record</h1>
-    <form method="POST">
-        <div class="mb-3">
-            <label for="title" class="form-label">Title</label>
-            <input type="text" class="form-control" name="title" required>
-        </div>
-        <div class="mb-3">
-            <label for="description" class="form-label">Description</label>
-            <textarea class="form-control" name="description" required></textarea>
-        </div>
-        <div class="mb-3">
-            <label for="release_date" class="form-label">Release Date</label>
-            <input type="date" class="form-control" name="release_date">
-        </div>
-        <button type="submit" class="btn btn-primary">Create</button>
-    </form>
+    <ul class="nav nav-tabs">
+        <li class="nav-item">
+            <a class="nav-link active" href="#" onclick="switchTab('create')">Create</a>
+        </li>
+    </ul>
+    
+    <div id="create" class="tab-target">
+        <form method="POST">
+            <div class="mb-3">
+                <label for="title" class="form-label">Title</label>
+                <input type="text" class="form-control" name="title" required>
+            </div>
+            <div class="mb-3">
+                <label for="description" class="form-label">Description</label>
+                <textarea class="form-control" name="description" required></textarea>
+            </div>
+            <div class="mb-3">
+                <label for="release_date" class="form-label">Release Date</label>
+                <input type="date" class="form-control" name="release_date">
+            </div>
+            <button type="submit" class="btn btn-primary">Create</button>
+        </form>
 </div>
 <?php require_once(__DIR__ . "/../../../partials/flash.php"); ?>
