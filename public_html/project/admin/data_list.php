@@ -9,6 +9,15 @@ $sortField = se($_GET, "sort_field", "title", false);
 $sortOrder = se($_GET, "sort_order", "ASC", false);
 $limit = max(1, min(se($_GET, "limit", 10, false), 100)); // Default to 10, range 1-100
 
+// Pagination variables
+$limit = min(max((int)se($_GET, "limit", 10, false), 1), 100); // Limit between 1 and 100	
+$page = max((int)se($_GET, "page", 1, false), 1); // Page must be >= 1	
+$offset = ($page - 1) * $limit;	
+
+// Filter input	
+$filter = "%" . se($_GET, "filter", "", false) . "%";	
+
+// Fetch all data from the database
 $db = getDB();
 $query = "SELECT * FROM MediaEntities WHERE 1=1";
 $params = [];
@@ -26,6 +35,11 @@ $stmt = $db->prepare($query);
 $stmt->execute($params);
 $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
+// Total rows for pagination	
+$totalStmt = $db->prepare("SELECT COUNT(*) as total FROM MediaEntities WHERE title LIKE :filter AND is_deleted = 0");	
+$totalStmt->execute([":filter" => $filter]);	
+$totalRows = (int)$totalStmt->fetch(PDO::FETCH_ASSOC)["total"];	
+$totalPages = ceil($totalRows / $limit);
 ?>
 
 <div class="container">

@@ -48,9 +48,8 @@ function processAPIData($apiData) {
         }
 
         // Validate release date
-        if (!empty($releaseDate) && !isValidDate($releaseDate) > 255) {
-            error_log("Truncated title: Original value: $$releaseDate");
-            $releaseDate = substr($releaseDate, 0, 255);
+        if (!empty($releaseDate) && !isValidDate($releaseDate)) {
+            $releaseDate = null; // Set to null if invalid
         }
 
         // Check if the record exists
