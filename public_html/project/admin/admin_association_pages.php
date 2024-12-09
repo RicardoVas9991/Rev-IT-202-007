@@ -4,7 +4,7 @@ is_logged_in(true);
 
 if (!has_role("Admin")) {
     flash("You don't have permission to view this page", "warning");
-    die(header("Location: $BASE_PATH" . "/home.php"));
+    exit(header("Location: $BASE_PATH" . "home.php"));
 }
 
 $userId = get_user_id();
@@ -17,24 +17,34 @@ $offset = ($page - 1) * $limit;
 
 $data = getAllUserAssociations($userId, $limit, $offset, $filter, $sort);
 $total = count($data); // rev/12-06-2024
-
-function getAllUserAssociations($limit = 10, $offset = 0, $usernameFilter = "", $sort = "username ASC") {
+function getAllUserAssociations($userId, $limit = 10, $offset = 0, $usernameFilter = "", $sort = "username ASC") {
     $db = getDB();
-    $query = "SELECT um.id, u.username, me.title, me.description, COUNT(um.id) AS total 
+    $query = "SELECT 
+                  u.username,
+                  me.title,
+                  me.description,
+                  COUNT(um.id) AS total 
               FROM UserMedia um 
               JOIN MediaEntities me ON um.media_id = me.id 
               JOIN Users u ON um.user_id = u.id 
-              GROUP BY u.username, me.title";
+              WHERE um.user_id = :userId ";
+              
+    // Add filter if provided
     if ($usernameFilter) {
-        $query .= " HAVING u.username LIKE :usernameFilter";
+        $query .= "AND u.username LIKE :usernameFilter ";
     }
-    $query .= " ORDER BY $sort LIMIT :limit OFFSET :offset";
+    $query .= "GROUP BY u.username, me.title, me.description ";
+    $query .= "ORDER BY $sort ";
+    $query .= "LIMIT $limit OFFSET $offset";
+
     $stmt = $db->prepare($query);
+
+    // Bind parameters
+    $stmt->bindValue(":userId", $userId, PDO::PARAM_INT);
     if ($usernameFilter) {
         $stmt->bindValue(":usernameFilter", "%" . $usernameFilter . "%");
     }
-    $stmt->bindValue(":limit", $limit, PDO::PARAM_INT);
-    $stmt->bindValue(":offset", $offset, PDO::PARAM_INT);
+
     $stmt->execute();
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
@@ -45,7 +55,7 @@ function getAllUserAssociations($limit = 10, $offset = 0, $usernameFilter = "", 
 <form method="POST" action="admin_assign.php">
     <label for="entity">Entity (partial):</label>
     <input type="text" name="entity" id="entity" required>
-    <label for="username">Username (partial):</label>
+    <label for="username">Name (partial):</label>
     <input type="text" name="username" id="username" required>
     <button type="submit">Search</button>
 </form>

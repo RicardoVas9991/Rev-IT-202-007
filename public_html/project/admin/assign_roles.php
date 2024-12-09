@@ -76,10 +76,10 @@ if (isset($_POST["username"])) {
             <input class="form-control" type="search" name="username" placeholder="Username search" />
             <input class="btn btn-primary" type="submit" value="Search" />
         </div>
-    <form method="POST">
+    <!-- <form method="POST">
         <?php render_input(["type" => "search", "name" => "username", "placeholder" => "Username Search", "value" => $username]);/*lazy value to check if form submitted, not ideal*/ ?>
         <?php render_button(["text" => "Search", "type" => "submit"]); ?>
-    </form>
+    </form> -->
     <form method="POST">
         <?php if (isset($username) && !empty($username)) : ?>
             <input type="hidden" name="username" value="<?php se($username, false); ?>" />

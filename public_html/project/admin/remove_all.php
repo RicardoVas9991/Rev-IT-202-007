@@ -4,7 +4,7 @@ is_logged_in(true);
 
 if (!has_role("Admin")) {
     flash("You do not have permission to access this page.", "danger");
-    header("Location: project/home.php");
+    header("Location: home.php");
     exit;
 }
 
