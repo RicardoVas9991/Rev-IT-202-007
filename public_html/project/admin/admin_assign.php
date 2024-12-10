@@ -2,6 +2,11 @@
 require(__DIR__ . "/../../../partials/nav.php");
 is_logged_in(true);
 
+if (!has_role("Admin")) {
+    flash("You don't have permission to view this page", "warning");
+    exit(header("Location: $BASE_PATH" . "home.php"));
+}
+
 // Process form submission
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $entity = $_POST['entity'] ?? '';
@@ -10,7 +15,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!empty($entity) && !empty($username)) {
         // Example: Logic to assign an entity to a user
         $db = getDB();
-        $stmt = $db->prepare("INSERT INTO UserMedia (user_id, media_id) 
+        $stmt = $db->prepare("INSERT INTO UserMediaAssociations (user_id, media_entity_id) 
                               VALUES ((SELECT id FROM Users WHERE username = :username), 
                                       (SELECT id FROM MediaEntities WHERE title = :entity))");
         try {
@@ -32,3 +37,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <input type="text" id="username" name="username" required>
     <button type="submit">Assign</button>
 </form>
+
+
+<?php require_once(__DIR__ . "/../../../partials/flash.php"); ?>

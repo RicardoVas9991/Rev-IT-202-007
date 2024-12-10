@@ -52,7 +52,7 @@ $associations = $assocStmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
 <div class="container">
-    <h1>Admin Association Management</h1>
+    <h1>User Association Management</h1>
     <h3>Create New Association</h3>
     <form method="POST">
         <div class="form-group">

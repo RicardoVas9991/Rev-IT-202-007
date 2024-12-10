@@ -14,8 +14,8 @@ $total = count($data); // rev/12-06-2024
 function getUserAssociations($userId, $limit = 10, $offset = 0, $filter = "", $sort = "title ASC") {
     $db = getDB();
     $query = "SELECT um.id, me.title, me.description, me.release_date 
-              FROM UserMedia um 
-              JOIN MediaEntities me ON um.media_id = me.id 
+              FROM UserMediaAssociations um 
+              JOIN MediaEntities me ON um.media_entity_id = me.id 
               WHERE um.user_id = :user_id";
     if ($filter) {
         $query .= " AND me.title LIKE :filter";
@@ -28,12 +28,15 @@ function getUserAssociations($userId, $limit = 10, $offset = 0, $filter = "", $s
     if ($filter) {
         $stmt->bindValue(":filter", "%" . $filter . "%");
     }
+    
     $stmt->execute();
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 // rev/12-06-2024
 
 ?>
+
+<div class="container">
 <h1>Your Associated Media</h1>
 <p>Total Count: <?= $total ?></p>
 <table>
@@ -52,8 +55,8 @@ function getUserAssociations($userId, $limit = 10, $offset = 0, $filter = "", $s
             <td><?= htmlspecialchars($row['description']) ?></td>
             <td><?= htmlspecialchars($row['release_date']) ?></td>
             <td>
-                <a href="view.php?id=<?= $row['id'] ?>">View</a>
-                <a href="delete_association.php?id=<?= $row['id'] ?>" onclick="return confirm('Are you sure?')">Delete</a>
+                <a href="view.php?id=<?= $row['id'] ?>" class="btn btn-info">View</a>
+                <a href="delete_association.php?id=<?= $row['id'] ?>" class="btn btn-danger" onclick="return confirm('Are you sure?')">Delete</a>
             </td>
         </tr>
         <?php endforeach; ?>
@@ -65,3 +68,6 @@ function getUserAssociations($userId, $limit = 10, $offset = 0, $filter = "", $s
     </tbody>
 </table>
 <a href="remove_all.php" onclick="return confirm('Remove all associations?')">Remove All Associations</a>
+</div>
+
+<?php require_once(__DIR__ . "/../../../partials/flash.php"); ?>

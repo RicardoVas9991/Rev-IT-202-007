@@ -1,4 +1,4 @@
--- rev/12-06-2024
+-- OLD - rev/12-06-2024
 CREATE TABLE UserMedia (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL,

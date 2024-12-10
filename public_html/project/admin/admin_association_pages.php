@@ -23,9 +23,10 @@ function getAllUserAssociations($userId, $limit = 10, $offset = 0, $usernameFilt
                   u.username,
                   me.title,
                   me.description,
+                  me.release_date,
                   COUNT(um.id) AS total 
-              FROM UserMedia um 
-              JOIN MediaEntities me ON um.media_id = me.id 
+              FROM UserMediaAssociations um 
+              JOIN MediaEntities me ON um.media_entity_id = me.id 
               JOIN Users u ON um.user_id = u.id 
               WHERE um.user_id = :userId ";
               
@@ -33,7 +34,7 @@ function getAllUserAssociations($userId, $limit = 10, $offset = 0, $usernameFilt
     if ($usernameFilter) {
         $query .= "AND u.username LIKE :usernameFilter ";
     }
-    $query .= "GROUP BY u.username, me.title, me.description ";
+    $query .= "GROUP BY u.username, me.title, me.description, me.release_date  ";
     $query .= "ORDER BY $sort ";
     $query .= "LIMIT $limit OFFSET $offset";
 
@@ -51,14 +52,16 @@ function getAllUserAssociations($userId, $limit = 10, $offset = 0, $usernameFilt
 // rev/12-06-2024
 
 ?>
+
+<div class="container">
 <h1>Your Associated Media</h1>
-<form method="POST" action="admin_assign.php">
-    <label for="entity">Entity (partial):</label>
-    <input type="text" name="entity" id="entity" required>
-    <label for="username">Name (partial):</label>
-    <input type="text" name="username" id="username" required>
-    <button type="submit">Search</button>
-</form>
+    <form method="POST" action="admin_assign.php">
+        <label for="entity">Entity (partial):</label>
+            <input type="text" name="entity" id="entity" required>
+            <label for="username">Name (partial):</label>
+                <input type="text" name="username" id="username" required>
+                    <button type="submit">Search</button>
+    </form>
 <p>Total Count: <?= $total ?></p>
 <table>
     <thead>
@@ -76,8 +79,8 @@ function getAllUserAssociations($userId, $limit = 10, $offset = 0, $usernameFilt
             <td><?= htmlspecialchars($row['description']) ?></td>
             <td><?= htmlspecialchars($row['release_date']) ?></td>
             <td>
-                <a href="view.php?id=<?= $row['id'] ?>">View</a>
-                <a href="delete_association.php?id=<?= $row['id'] ?>" onclick="return confirm('Are you sure?')">Delete</a>
+                <a href="view.php?id=<?= $row['id'] ?>" class="btn btn-info">View</a>
+                <a href="delete_association.php?id=<?= $row['id'] ?>" class="btn btn-danger" onclick="return confirm('Are you sure?')">Delete</a>
             </td>
         </tr>
         <?php endforeach; ?>
@@ -89,3 +92,7 @@ function getAllUserAssociations($userId, $limit = 10, $offset = 0, $usernameFilt
     </tbody>
 </table>
 <a href="remove_all.php" onclick="return confirm('Remove all associations?')">Remove All Associations</a>
+</div>
+
+
+<?php require_once(__DIR__ . "/../../../partials/flash.php"); ?>
