@@ -7,6 +7,8 @@ is_logged_in(true);
 $db = getDB();
 
 // Modify the query to match your schema
+$limit = $_GET['limit'] ?? 10; // Default
+$limit = min(max((int)$limit, 1), 100); // Enforce range
 $query = "SELECT * FROM MediaEntities WHERE user_id IS NULL";
 $stmt = $db->prepare($query);
 
