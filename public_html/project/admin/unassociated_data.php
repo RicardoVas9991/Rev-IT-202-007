@@ -23,6 +23,13 @@ try {
 
 <div class="container">
     <h1>Unassociated Media Entities</h1>
+    <form method="POST" action="admin_association.php">
+        <label for="entity">Entity (partial):</label>
+            <input type="text" name="entity" id="entity" required>
+            <label for="username">Name (partial):</label>
+                <input type="text" name="username" id="username" required>
+                    <button type="search">Search</button>
+    </form>
     <?php if (count($unassociated) === 0): ?>
         <div class="alert alert-info">No unassociated entities found.</div>
     <?php else: ?>
