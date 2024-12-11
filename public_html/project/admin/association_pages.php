@@ -1,19 +1,61 @@
-<?php require(__DIR__ . "/../../../partials/nav.php"); is_logged_in(true);
+<?php 
+require(__DIR__ . "/../../../partials/nav.php"); 
+is_logged_in(true);
 
 $userId = get_user_id();
-$limit = $_GET['limit'] ?? 10; // Default 10
-$limit = min(max((int)$limit, 1), 100); // Enforce range 1-100
+$limit = $_GET['limit'] ?? 10;
+$limit = min(max((int)$limit, 1), 100);
 $filter = $_GET['filter'] ?? "";
 $sort = $_GET['sort'] ?? "title ASC";
 $page = $_GET['page'] ?? 1;
 $offset = ($page - 1) * $limit;
 
+// Handle POST request
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $mediaTitle = $_POST['media_title'] ?? '';
+    $description = $_POST['description'] ?? '';
+    $releaseDate = $_POST['release_date'] ?? '';
+
+    // Validate input
+    if (!empty($mediaTitle) && !empty($description) && !empty($releaseDate)) {
+        $db = getDB();
+        $query = "INSERT INTO MediaEntities (title, description, release_date) VALUES (:title, :description, :release_date)";
+        $stmt = $db->prepare($query);
+        $stmt->bindValue(":title", htmlspecialchars($mediaTitle), PDO::PARAM_STR);
+        $stmt->bindValue(":description", htmlspecialchars($description), PDO::PARAM_STR);
+        $stmt->bindValue(":release_date", $releaseDate, PDO::PARAM_STR);
+
+        try {
+            $stmt->execute();
+            $mediaEntityId = $db->lastInsertId();
+
+            // Link the media entity to the user
+            $query = "INSERT INTO UserMediaAssociations (user_id, media_entity_id) VALUES (:user_id, :media_entity_id)";
+            $stmt = $db->prepare($query);
+            $stmt->bindValue(":user_id", $userId, PDO::PARAM_INT);
+            $stmt->bindValue(":media_entity_id", $mediaEntityId, PDO::PARAM_INT);
+            $stmt->execute();
+
+            flash("Association created successfully!", "success");
+        } catch (Exception $e) {
+            flash("Error creating association: " . $e->getMessage(), "danger");
+        }
+    } else {
+        flash("All fields are required.", "warning");
+    }
+}
+
+// Fetch associations
 $data = getUserAssociations($userId, $limit, $offset, $filter, $sort);
-$total = count($data); // rev/12-06-2024
+$total = count($data);
 
 function getUserAssociations($userId, $limit = 10, $offset = 0, $filter = "", $sort = "title ASC") {
     $db = getDB();
-    $query = "SELECT um.id, me.title, me.description, me.release_date 
+    $query = "SELECT 
+                  um.id AS association_id, 
+                  me.title, 
+                  me.description, 
+                  me.release_date 
               FROM UserMediaAssociations um 
               JOIN MediaEntities me ON um.media_entity_id = me.id 
               WHERE um.user_id = :user_id";
@@ -32,14 +74,19 @@ function getUserAssociations($userId, $limit = 10, $offset = 0, $filter = "", $s
     $stmt->execute();
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
-// rev/12-06-2024
-
 ?>
 
 <div class="container">
 <h1>Your Associated Media</h1>
+<form method="POST" action="user_association.php">
+        <label for="entity">Entity (partial):</label>
+            <input type="text" name="entity" id="entity" required>
+            <label for="username">Name (partial):</label>
+                <input type="text" name="username" id="username" required>
+                    <button type="search">Search</button>
+    </form>
 <p>Total Count: <?= $total ?></p>
-<table>
+<table class="table table-bordered">
     <thead>
         <tr>
             <th>Title</th>
@@ -55,8 +102,8 @@ function getUserAssociations($userId, $limit = 10, $offset = 0, $filter = "", $s
             <td><?= htmlspecialchars($row['description']) ?></td>
             <td><?= htmlspecialchars($row['release_date']) ?></td>
             <td>
-                <a href="view.php?id=<?= $row['id'] ?>" class="btn btn-info">View</a>
-                <a href="delete_association.php?id=<?= $row['id'] ?>" class="btn btn-danger" onclick="return confirm('Are you sure?')">Delete</a>
+                <a href="view.php?id=<?= htmlspecialchars($row['association_id']) ?>" class="btn btn-info">View</a>
+                <a href="delete_association.php?id=<?= htmlspecialchars($row['association_id']) ?>" class="btn btn-danger" onclick="return confirm('Are you sure?')">Delete</a>
             </td>
         </tr>
         <?php endforeach; ?>
@@ -67,7 +114,7 @@ function getUserAssociations($userId, $limit = 10, $offset = 0, $filter = "", $s
         <?php endif; ?>
     </tbody>
 </table>
-<a href="remove_all.php" onclick="return confirm('Remove all associations?')">Remove All Associations</a>
+<!-- <a href="remove_all.php" onclick="return confirm('Remove all associations?')">Remove All Associations</a> -->
 </div>
 
 <?php require_once(__DIR__ . "/../../../partials/flash.php"); ?>

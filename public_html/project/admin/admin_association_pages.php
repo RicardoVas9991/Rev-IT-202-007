@@ -20,6 +20,7 @@ $total = count($data); // rev/12-06-2024
 function getAllUserAssociations($userId, $limit = 10, $offset = 0, $usernameFilter = "", $sort = "username ASC") {
     $db = getDB();
     $query = "SELECT 
+                  me.id AS media_entity_id,
                   u.username,
                   me.title,
                   me.description,
@@ -34,7 +35,7 @@ function getAllUserAssociations($userId, $limit = 10, $offset = 0, $usernameFilt
     if ($usernameFilter) {
         $query .= "AND u.username LIKE :usernameFilter ";
     }
-    $query .= "GROUP BY u.username, me.title, me.description, me.release_date  ";
+    $query .= "GROUP BY me.id,u.username, me.title, me.description, me.release_date  ";
     $query .= "ORDER BY $sort ";
     $query .= "LIMIT $limit OFFSET $offset";
 
@@ -54,16 +55,16 @@ function getAllUserAssociations($userId, $limit = 10, $offset = 0, $usernameFilt
 ?>
 
 <div class="container">
-<h1>Your Associated Media</h1>
-    <form method="POST" action="admin_assign.php">
+<h1>Your Admin Associated Media</h1>
+    <form method="POST" action="admin_association.php">
         <label for="entity">Entity (partial):</label>
             <input type="text" name="entity" id="entity" required>
             <label for="username">Name (partial):</label>
                 <input type="text" name="username" id="username" required>
-                    <button type="submit">Search</button>
+                    <button type="search">Search</button>
     </form>
 <p>Total Count: <?= $total ?></p>
-<table>
+<table class="table table-bordered">
     <thead>
         <tr>
             <th>Title</th>
@@ -79,9 +80,10 @@ function getAllUserAssociations($userId, $limit = 10, $offset = 0, $usernameFilt
             <td><?= htmlspecialchars($row['description']) ?></td>
             <td><?= htmlspecialchars($row['release_date']) ?></td>
             <td>
-                <a href="view.php?id=<?= $row['id'] ?>" class="btn btn-info">View</a>
-                <a href="delete_association.php?id=<?= $row['id'] ?>" class="btn btn-danger" onclick="return confirm('Are you sure?')">Delete</a>
-            </td>
+            <a href="view_data.php?id=<?= se($row, "media_entity_id") ?>" class="btn btn-info">View</a>
+            <a href="delete_association.php?id=<?= se($row, "media_entity_id") ?>" class="btn btn-danger" 
+                onclick="return confirm('Are you sure?')">Delete</a>
+        </td>
         </tr>
         <?php endforeach; ?>
         <?php if (empty($data)): ?>

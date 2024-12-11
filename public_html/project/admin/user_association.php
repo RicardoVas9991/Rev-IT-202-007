@@ -35,7 +35,7 @@ if (isset($_POST["assign"])) {
     }
 
     // Refresh the page to reflect changes
-    header("Location: admin_association.php");
+    header("Location: user_association.php");
     exit;
 }
 

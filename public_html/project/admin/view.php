@@ -5,7 +5,7 @@ is_logged_in(true); // Ensure only authenticated users access this page
 $id = $_GET['id'] ?? null; // Get the ID from the URL
 if (!$id) {
     flash("No ID provided.", "warning");
-    die(header("Location: admin_association_pages.php")); // Redirect if no ID
+    exit(header("Location: admin_association_pages.php")); // Redirect if no ID
 }
 
 $db = getDB();
@@ -15,8 +15,8 @@ $stmt->execute();
 $media = $stmt->fetch(PDO::FETCH_ASSOC);
 
 if (!$media) {
-    flash("Media not found.", "warning");
-    die(header("Location: admin_association_pages.php")); // Redirect if media not found
+    flash("Media not found or is Admin only.", "warning");
+    exit(header("Location: admin_association_pages.php")); // Redirect if media not found
 }
 
 ?>
@@ -27,6 +27,6 @@ if (!$media) {
 <?php if (has_role("Admin")) : ?>
     <a href="admin_association_pages.php">Back to List</a>
 <?php else : ?>
-    <a href="view_data.php">Back to List</a>
+    <a href="association_pages.php">Back to List</a>
 <?php endif; ?>
 <!-- <a href="admin_association_pages.php">Back to List</a> -->
