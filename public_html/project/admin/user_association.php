@@ -17,7 +17,7 @@ $mediaStmt = $db->prepare("SELECT id, title FROM MediaEntities WHERE id NOT IN (
 $mediaStmt->execute();
 $unassociatedMedia = $mediaStmt->fetchAll(PDO::FETCH_ASSOC);
 
-// Handle association submission
+// Handle association submission - rev/12-10-2024
 if (isset($_POST["assign"])) {
     $userId = se($_POST, "user_id", -1, false);
     $mediaId = se($_POST, "media_id", -1, false);

@@ -1,6 +1,7 @@
 <?php
 require(__DIR__ . "/../../../partials/nav.php");
 is_logged_in(true);
+// rev/12-05-2024
 
 if (!has_role("Admin")) { // Ensure only admins access this page
     flash("You do not have permission to access this page.", "danger");
@@ -15,6 +16,9 @@ $db = getDB();
 $userStmt = $db->prepare("SELECT id, username FROM Users ORDER BY username ASC");
 $userStmt->execute();
 $users = $userStmt->fetchAll(PDO::FETCH_ASSOC);
+$limit = $_GET['limit'] ?? 10;
+$limit = max((int)$limit, 25);
+
 
 // Fetch unassociated media entities
 $mediaStmt = $db->prepare("SELECT id, title FROM MediaEntities WHERE id NOT IN (
@@ -23,7 +27,7 @@ $mediaStmt = $db->prepare("SELECT id, title FROM MediaEntities WHERE id NOT IN (
 $mediaStmt->execute();
 $unassociatedMedia = $mediaStmt->fetchAll(PDO::FETCH_ASSOC);
 
-// Handle association submission
+// Handle association submission - rev/12-08-2024
 if (isset($_POST["assign"])) {
     $userId = se($_POST, "user_id", -1, false);
     $mediaId = se($_POST, "media_id", -1, false);

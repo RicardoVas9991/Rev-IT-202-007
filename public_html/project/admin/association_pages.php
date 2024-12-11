@@ -1,6 +1,7 @@
 <?php 
 require(__DIR__ . "/../../../partials/nav.php"); 
 is_logged_in(true);
+// rev/12-08-2024
 
 $userId = get_user_id();
 $limit = $_GET['limit'] ?? 10;
@@ -29,7 +30,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stmt->execute();
             $mediaEntityId = $db->lastInsertId();
 
-            // Link the media entity to the user
+            // Link the media entity to the user - rev/12-10-2024
             $query = "INSERT INTO UserMediaAssociations (user_id, media_entity_id) VALUES (:user_id, :media_entity_id)";
             $stmt = $db->prepare($query);
             $stmt->bindValue(":user_id", $userId, PDO::PARAM_INT);
@@ -59,7 +60,7 @@ function getUserAssociations($userId, $limit = 10, $offset = 0, $filter = "", $s
               FROM UserMediaAssociations um 
               JOIN MediaEntities me ON um.media_entity_id = me.id 
               WHERE um.user_id = :user_id";
-    if ($filter) {
+    if ($filter) { // rev/12-05-2024
         $query .= " AND me.title LIKE :filter";
     }
     $query .= " ORDER BY $sort LIMIT :limit OFFSET :offset";
@@ -114,7 +115,8 @@ function getUserAssociations($userId, $limit = 10, $offset = 0, $filter = "", $s
         <?php endif; ?>
     </tbody>
 </table>
-<!-- <a href="remove_all.php" onclick="return confirm('Remove all associations?')">Remove All Associations</a> -->
+<!-- <a href="remove_all.php" onclick="return confirm('Remove all associations?')">Remove All Associations</a> 
+ see admin_association_pages for access to remove_all -->
 </div>
 
 <?php require_once(__DIR__ . "/../../../partials/flash.php"); ?>

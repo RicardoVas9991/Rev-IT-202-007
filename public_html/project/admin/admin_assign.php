@@ -13,7 +13,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $username = $_POST['username'] ?? '';
 
     if (!empty($entity) && !empty($username)) {
-        // Example: Logic to assign an entity to a user
+        // - rev/12-05-2024
         $db = getDB();
         $stmt = $db->prepare("INSERT INTO UserMediaAssociations (user_id, media_entity_id) 
                               VALUES ((SELECT id FROM Users WHERE username = :username), 
