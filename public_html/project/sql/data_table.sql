@@ -13,4 +13,6 @@ ALTER TABLE MediaEntities MODIFY COLUMN title VARCHAR(255);
 
 ALTER TABLE MediaEntities MODIFY COLUMN api_id VARCHAR(255);
 
-ALTER TABLE MediaEntities MODIFY COLUMN description TEXT(255);
+ALTER TABLE MediaEntities MODIFY COLUMN description TEXT(200);
+
+ALTER TABLE MediaEntities MODIFY COLUMN release_date DATE;

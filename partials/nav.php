@@ -62,6 +62,11 @@ session_start();
                             <li><a class="dropdown-item" href="<?php echo get_url('admin/data_creation.php'); ?>">Create Data</a></li>
                             <li><a class="dropdown-item" href="<?php echo get_url('admin/data_list.php'); ?>">List Data</a></li>
                             <li><a class="dropdown-item" href="<?php echo get_url('admin/API_Fetch.php'); ?>">Fetch API Data</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <!-- Newly added links  - rev/12-05-2024 -->
+                            <li><a class="dropdown-item" href="<?php echo get_url('admin/admin_assign.php'); ?>">Admin Assign</a></li>
+                            <li><a class="dropdown-item" href="<?php echo get_url('admin/admin_association_pages.php'); ?>">Admin Association Pages</a></li>
+                            <li><a class="dropdown-item" href="<?php echo get_url('admin/admin_association.php'); ?>">Admin Association</a></li>
                         </ul>
                     </li>
                 <?php endif; ?>

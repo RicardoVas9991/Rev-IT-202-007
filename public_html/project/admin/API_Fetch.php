@@ -3,6 +3,11 @@ require(__DIR__ . "/../../../partials/nav.php");
 is_logged_in(true);
 // rev/12-02-2024
 
+if (!has_role("Admin")) {
+    flash("You don't have permission to view this page", "warning");
+    exit(header("Location: $BASE_PATH" . "home.php"));
+}
+
 // Function to fetch data from the Utelly API
 function fetchAPIData() {
    
@@ -48,9 +53,8 @@ function processAPIData($apiData) {
         }
 
         // Validate release date
-        if (!empty($releaseDate) && !isValidDate($releaseDate) > 255) {
-            error_log("Truncated title: Original value: $$releaseDate");
-            $releaseDate = substr($releaseDate, 0, 255);
+        if (!empty($releaseDate) && !isValidDate($releaseDate)) {
+            $releaseDate = null; // Set to null if invalid
         }
 
         // Check if the record exists
